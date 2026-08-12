@@ -1,122 +1,2362 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="LootZone - سوق رقمي لبيع وشراء عناصر وحسابات الألعاب" />
-  <title>LootZone</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#07151d">
+  <meta name="color-scheme" content="dark">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="description" content="LootZone — نسخة ما قبل الإطلاق لسوق عربي للعروض الرقمية المسموح بها في مجال الألعاب.">
+  <title>LootZone | نسخة ما قبل الإطلاق</title>
+  <style>
+    :root {
+      --bg: #061219;
+      --bg-soft: #0a1a23;
+      --panel: #0d202a;
+      --panel-2: #112934;
+      --panel-3: #163441;
+      --line: rgba(151, 196, 213, .16);
+      --line-strong: rgba(72, 214, 224, .34);
+      --text: #f5fbfd;
+      --muted: #9fb5be;
+      --cyan: #45d7df;
+      --cyan-2: #1aaab5;
+      --gold: #f4c75a;
+      --green: #4ed48a;
+      --red: #ff6b78;
+      --shadow: 0 22px 60px rgba(0, 0, 0, .32);
+      --radius: 22px;
+      --radius-sm: 14px;
+      --header-h: 78px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 16% 0%, rgba(30, 168, 181, .17), transparent 30%),
+        radial-gradient(circle at 88% 18%, rgba(244, 199, 90, .08), transparent 24%),
+        var(--bg);
+      font-family: Tahoma, Arial, "Segoe UI", sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .22;
+      background-image:
+        linear-gradient(rgba(255,255,255,.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.015) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(to bottom, #000, transparent 70%);
+      z-index: -1;
+    }
+    button, input, select, textarea { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button { cursor: pointer; }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    [hidden] { display: none !important; }
+    :focus-visible { outline: 3px solid rgba(69, 215, 223, .72); outline-offset: 3px; }
+
+    .skip-link {
+      position: fixed;
+      top: 8px;
+      right: 12px;
+      z-index: 1000;
+      padding: 10px 14px;
+      color: #031014;
+      background: var(--cyan);
+      border-radius: 10px;
+      transform: translateY(-140%);
+      transition: transform .2s ease;
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    .shell { width: min(1220px, calc(100% - 36px)); margin-inline: auto; }
+    .prelaunch-banner {
+      padding: 9px 16px;
+      color: #2d2103;
+      text-align: center;
+      background: linear-gradient(90deg, #f4c75a, #ffe6a0);
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      min-height: var(--header-h);
+      border-bottom: 1px solid var(--line);
+      background: rgba(6, 18, 25, .88);
+      backdrop-filter: blur(18px);
+    }
+    .topbar-inner {
+      min-height: var(--header-h);
+      display: grid;
+      grid-template-columns: auto minmax(260px, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+    }
+    .brand { display: flex; align-items: center; gap: 11px; min-width: max-content; }
+    .brand-logo {
+      width: 48px;
+      height: 48px;
+      object-fit: cover;
+      border-radius: 14px;
+      border: 1px solid rgba(69, 215, 223, .34);
+      box-shadow: 0 0 24px rgba(69, 215, 223, .12);
+    }
+    .brand-copy { line-height: 1.15; }
+    .brand-name {
+      display: block;
+      font-weight: 900;
+      font-size: 21px;
+      letter-spacing: -.4px;
+    }
+    .brand-name span { color: var(--cyan); }
+    .brand-copy small { display: block; margin-top: 5px; color: var(--muted); font-size: 11px; }
+    .header-search { position: relative; }
+    .header-search svg {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      width: 19px;
+      height: 19px;
+      transform: translateY(-50%);
+      color: var(--muted);
+      pointer-events: none;
+    }
+    .header-search input {
+      width: 100%;
+      height: 48px;
+      padding: 0 47px 0 16px;
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: rgba(17, 41, 52, .72);
+      transition: border-color .2s, background .2s, box-shadow .2s;
+    }
+    .header-search input::placeholder { color: #8299a3; }
+    .header-search input:focus {
+      border-color: var(--cyan-2);
+      background: var(--panel-2);
+      box-shadow: 0 0 0 4px rgba(69, 215, 223, .08);
+    }
+    .header-actions { display: flex; gap: 9px; align-items: center; }
+
+    .btn {
+      min-height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 17px;
+      border: 1px solid transparent;
+      border-radius: 14px;
+      color: var(--text);
+      font-weight: 800;
+      white-space: nowrap;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease, opacity .18s ease;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .btn-primary {
+      color: #041317;
+      background: linear-gradient(135deg, #6be5e9, var(--cyan));
+      box-shadow: 0 10px 26px rgba(36, 183, 194, .2);
+    }
+    .btn-primary:hover { background: linear-gradient(135deg, #83edf0, #55dfe6); }
+    .btn-secondary { border-color: var(--line); background: rgba(17, 41, 52, .78); }
+    .btn-secondary:hover { border-color: rgba(69, 215, 223, .35); background: var(--panel-2); }
+    .btn-gold { color: #171004; background: linear-gradient(135deg, #ffe48d, var(--gold)); }
+    .btn-danger { color: #fff; border-color: rgba(255, 107, 120, .3); background: rgba(255, 107, 120, .13); }
+    .btn-quiet { min-height: 42px; padding-inline: 12px; border-color: var(--line); background: transparent; }
+    .btn svg { width: 18px; height: 18px; flex: none; }
+    .icon-btn {
+      width: 44px;
+      height: 44px;
+      display: inline-grid;
+      place-items: center;
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: rgba(17, 41, 52, .72);
+      transition: background .18s, border-color .18s, color .18s;
+    }
+    .icon-btn:hover { border-color: var(--line-strong); background: var(--panel-3); }
+    .icon-btn svg { width: 20px; height: 20px; }
+
+    .hero { padding: 62px 0 42px; }
+    .hero-card {
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: minmax(0, 1.28fr) minmax(310px, .72fr);
+      gap: 34px;
+      align-items: center;
+      min-height: 440px;
+      padding: clamp(30px, 5vw, 62px);
+      border: 1px solid rgba(69, 215, 223, .2);
+      border-radius: 32px;
+      background:
+        linear-gradient(125deg, rgba(13, 32, 42, .97) 5%, rgba(11, 31, 40, .92) 54%, rgba(7, 25, 32, .86)),
+        var(--panel);
+      box-shadow: var(--shadow);
+    }
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      width: 520px;
+      height: 520px;
+      left: -170px;
+      top: -220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(69, 215, 223, .2), transparent 66%);
+      pointer-events: none;
+    }
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      inset: auto 7% 0 auto;
+      width: 190px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      box-shadow: 0 -82px 80px 34px rgba(244, 199, 90, .06);
+    }
+    .hero-copy { position: relative; z-index: 2; }
+    .eyebrow {
+      width: fit-content;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+      padding: 8px 12px;
+      color: #bceff1;
+      border: 1px solid rgba(69, 215, 223, .25);
+      border-radius: 999px;
+      background: rgba(69, 215, 223, .08);
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .eyebrow-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 12px var(--green); }
+    .hero h1 {
+      max-width: 720px;
+      margin: 0;
+      font-size: clamp(36px, 5.6vw, 70px);
+      line-height: 1.12;
+      letter-spacing: -2px;
+    }
+    .hero h1 span { color: var(--cyan); }
+    .hero-copy > p { max-width: 660px; margin: 20px 0 0; color: #b8c9d0; font-size: clamp(16px, 2vw, 20px); }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 11px; margin-top: 30px; }
+    .hero-trust { display: flex; flex-wrap: wrap; gap: 18px 26px; margin-top: 30px; color: var(--muted); font-size: 13px; }
+    .hero-trust span { display: flex; align-items: center; gap: 7px; }
+    .hero-trust svg { width: 17px; height: 17px; color: var(--green); }
+    .hero-visual { position: relative; z-index: 2; display: grid; place-items: center; }
+    .logo-frame {
+      position: relative;
+      width: min(350px, 100%);
+      aspect-ratio: 1;
+      padding: 17px;
+      border: 1px solid rgba(69, 215, 223, .28);
+      border-radius: 33px;
+      background: rgba(5, 17, 23, .65);
+      box-shadow: 0 28px 80px rgba(0,0,0,.4), 0 0 65px rgba(30, 168, 181, .11);
+      transform: rotate(-1.5deg);
+    }
+    .logo-frame::before, .logo-frame::after {
+      content: "";
+      position: absolute;
+      width: 42px;
+      height: 42px;
+      border-color: var(--gold);
+      opacity: .7;
+    }
+    .logo-frame::before { top: -9px; right: -9px; border-top: 2px solid; border-right: 2px solid; border-radius: 0 16px 0 0; }
+    .logo-frame::after { bottom: -9px; left: -9px; border-bottom: 2px solid; border-left: 2px solid; border-radius: 0 0 0 16px; }
+    .logo-frame img { width: 100%; height: 100%; object-fit: cover; border-radius: 22px; }
+    .floating-pill {
+      position: absolute;
+      left: -18px;
+      bottom: 30px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 12px 15px;
+      color: #eafcff;
+      border: 1px solid var(--line-strong);
+      border-radius: 14px;
+      background: rgba(13, 32, 42, .9);
+      box-shadow: 0 14px 30px rgba(0,0,0,.3);
+      backdrop-filter: blur(10px);
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .floating-pill svg { width: 20px; height: 20px; color: var(--gold); }
+
+    .section { padding: 34px 0 70px; scroll-margin-top: calc(var(--header-h) + 18px); }
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 18px; margin-bottom: 22px; }
+    .section-heading h2 { margin: 0; font-size: clamp(26px, 3.5vw, 39px); letter-spacing: -.8px; }
+    .section-heading p { margin: 6px 0 0; color: var(--muted); }
+    .results-meta { color: var(--muted); font-size: 14px; white-space: nowrap; }
+    .results-meta strong { color: var(--cyan); }
+
+    .category-strip {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(145px, 1fr));
+      gap: 10px;
+      margin-bottom: 24px;
+      overflow-x: auto;
+      scrollbar-width: thin;
+      padding-bottom: 4px;
+    }
+    .category-card {
+      min-width: 145px;
+      min-height: 90px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 14px;
+      color: var(--text);
+      text-align: right;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: rgba(13, 32, 42, .78);
+      transition: transform .18s, border-color .18s, background .18s;
+    }
+    .category-card:hover, .category-card[aria-pressed="true"] {
+      transform: translateY(-2px);
+      border-color: rgba(69, 215, 223, .45);
+      background: linear-gradient(145deg, rgba(28, 74, 87, .78), rgba(13, 32, 42, .9));
+    }
+    .category-card[aria-pressed="true"] { box-shadow: inset 0 0 0 1px rgba(69, 215, 223, .18); }
+    .cat-icon {
+      width: 43px;
+      height: 43px;
+      flex: none;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      color: var(--cyan);
+      background: rgba(69, 215, 223, .1);
+      font-size: 22px;
+    }
+    .category-card strong { display: block; font-size: 14px; line-height: 1.35; }
+    .category-card small { display: block; margin-top: 3px; color: var(--muted); font-size: 11px; }
+
+    .market-layout { display: grid; grid-template-columns: 270px minmax(0, 1fr); gap: 22px; align-items: start; }
+    .filters {
+      position: sticky;
+      top: calc(var(--header-h) + 18px);
+      padding: 21px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(13, 32, 42, .82);
+      box-shadow: 0 18px 45px rgba(0,0,0,.2);
+    }
+    .filters-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 18px; }
+    .filters-head h3 { margin: 0; font-size: 18px; }
+    .clear-btn { color: var(--cyan); border: 0; background: transparent; font-weight: 800; font-size: 13px; }
+    .filter-group { padding: 17px 0; border-top: 1px solid var(--line); }
+    .filter-group:first-of-type { border-top: 0; padding-top: 0; }
+    .filter-label { display: block; margin-bottom: 9px; color: #d9e8ed; font-size: 13px; font-weight: 800; }
+    .field {
+      width: 100%;
+      min-height: 46px;
+      padding: 10px 13px;
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--bg-soft);
+      transition: border-color .18s, box-shadow .18s;
+    }
+    .field:focus { border-color: var(--cyan-2); box-shadow: 0 0 0 4px rgba(69, 215, 223, .07); }
+    select.field { appearance: auto; }
+    textarea.field { resize: vertical; min-height: 110px; }
+    .price-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .mobile-filter-btn { display: none; }
+
+    .listing-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+    .view-tabs { display: flex; flex-wrap: wrap; gap: 7px; }
+    .tab-btn {
+      min-height: 42px;
+      padding: 0 14px;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(13, 32, 42, .6);
+      font-weight: 800;
+    }
+    .tab-btn[aria-selected="true"] { color: #041317; border-color: var(--cyan); background: var(--cyan); }
+    .sort-field { width: 165px; min-height: 42px; }
+
+    .listing-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 15px; }
+    .listing-card {
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(13, 32, 42, .88);
+      box-shadow: 0 13px 30px rgba(0,0,0,.18);
+      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+    .listing-card:hover { transform: translateY(-4px); border-color: rgba(69, 215, 223, .34); box-shadow: 0 20px 40px rgba(0,0,0,.26); }
+    .card-media {
+      position: relative;
+      height: 168px;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 28% 20%, color-mix(in srgb, var(--card-color) 44%, transparent), transparent 46%),
+        linear-gradient(145deg, #173744, #091921);
+    }
+    .card-media::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(6,18,25,.68), transparent 55%);
+    }
+    .card-image { width: 100%; height: 100%; object-fit: cover; }
+    .card-emoji { position: relative; z-index: 1; font-size: 62px; filter: drop-shadow(0 13px 18px rgba(0,0,0,.34)); transform: translateY(-2px); }
+    .card-badge {
+      position: absolute;
+      z-index: 3;
+      top: 12px;
+      right: 12px;
+      padding: 6px 9px;
+      color: #dffbfd;
+      border: 1px solid rgba(69,215,223,.25);
+      border-radius: 999px;
+      background: rgba(5, 19, 25, .78);
+      backdrop-filter: blur(8px);
+      font-size: 10px;
+      font-weight: 800;
+    }
+    .favorite-btn { position: absolute; z-index: 4; top: 10px; left: 10px; background: rgba(5,19,25,.78); }
+    .favorite-btn[aria-pressed="true"] { color: var(--gold); border-color: rgba(244,199,90,.5); }
+    .card-body { padding: 16px; }
+    .card-game { color: var(--cyan); font-size: 11px; font-weight: 800; }
+    .card-title {
+      min-height: 49px;
+      margin: 6px 0 7px;
+      font-size: 16px;
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .card-desc {
+      min-height: 41px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.65;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .card-meta { display: flex; justify-content: space-between; align-items: end; gap: 10px; margin-top: 14px; padding-top: 13px; border-top: 1px solid var(--line); }
+    .price { color: var(--gold); font-size: 20px; font-weight: 900; letter-spacing: -.3px; }
+    .price small { color: #dfc679; font-size: 11px; }
+    .seller { color: var(--muted); font-size: 10px; text-align: left; }
+    .seller strong { display: block; color: #d9e8ed; font-size: 11px; }
+    .card-actions { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin-top: 13px; }
+    .card-actions .btn { min-height: 42px; padding-inline: 12px; font-size: 12px; }
+
+    .empty-state {
+      min-height: 370px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 40px 20px;
+      border: 1px dashed rgba(151, 196, 213, .25);
+      border-radius: var(--radius);
+      background: rgba(13, 32, 42, .45);
+    }
+    .empty-icon { width: 72px; height: 72px; display: grid; place-items: center; margin: 0 auto 15px; border-radius: 22px; color: var(--cyan); background: rgba(69,215,223,.09); font-size: 32px; }
+    .empty-state h3 { margin: 0 0 7px; }
+    .empty-state p { margin: 0 0 18px; color: var(--muted); }
+
+    .steps-grid, .safety-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+    .info-card {
+      position: relative;
+      overflow: hidden;
+      padding: 25px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(145deg, rgba(17,41,52,.82), rgba(10,26,35,.92));
+    }
+    .step-num { color: rgba(69,215,223,.16); font-size: 58px; font-weight: 900; line-height: 1; position: absolute; left: 17px; top: 12px; }
+    .info-icon { width: 50px; height: 50px; display: grid; place-items: center; color: var(--cyan); border-radius: 15px; background: rgba(69,215,223,.1); }
+    .info-icon svg { width: 25px; height: 25px; }
+    .info-card h3 { margin: 18px 0 7px; }
+    .info-card p { margin: 0; color: var(--muted); font-size: 14px; }
+    .safety-grid { grid-template-columns: 1.2fr .8fr; }
+    .safety-panel {
+      min-height: 300px;
+      padding: clamp(25px, 4vw, 42px);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(17,41,52,.92), rgba(7,24,32,.9));
+    }
+    .safety-panel h2 { margin: 0 0 10px; font-size: clamp(25px, 3vw, 36px); }
+    .safety-panel > p { color: var(--muted); }
+    .check-list { display: grid; gap: 13px; margin-top: 22px; }
+    .check-item { display: flex; gap: 10px; align-items: flex-start; color: #d8e7ec; }
+    .check-mark { width: 24px; height: 24px; flex: none; display: grid; place-items: center; color: #062016; border-radius: 50%; background: var(--green); font-weight: 900; }
+    .alpha-note {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: linear-gradient(145deg, rgba(244,199,90,.14), rgba(13,32,42,.9));
+      border-color: rgba(244,199,90,.25);
+    }
+    .alpha-note .tag { width: fit-content; padding: 6px 10px; color: var(--gold); border: 1px solid rgba(244,199,90,.3); border-radius: 999px; font-size: 12px; font-weight: 900; }
+    .alpha-note h3 { margin: 15px 0 8px; font-size: 23px; }
+    .alpha-note p { margin: 0; color: #cfc3a0; }
+
+    .full-width { width: 100%; }
+    .top-gap { margin-top: 18px; }
+    .toolbar-actions { display: flex; gap: 8px; }
+    .checkbox-row {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px;
+      align-items: start;
+      padding: 12px 13px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: rgba(69,215,223,.04);
+    }
+    .checkbox-row input { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--cyan); }
+    .checkbox-row label { color: #d7e7eb; font-size: 12px; font-weight: 700; }
+    .checkbox-row button { padding: 0; color: var(--cyan); border: 0; background: none; text-decoration: underline; }
+    .policy-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+    .policy-link {
+      min-height: 44px;
+      padding: 10px 12px;
+      color: #d9f4f6;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(69,215,223,.04);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .policy-link:hover { border-color: var(--line-strong); background: rgba(69,215,223,.09); }
+    .legal-copy { display: grid; gap: 18px; }
+    .legal-copy section { padding-bottom: 17px; border-bottom: 1px solid var(--line); }
+    .legal-copy section:last-child { padding-bottom: 0; border-bottom: 0; }
+    .legal-copy h3 { margin: 0 0 6px; color: var(--cyan); font-size: 17px; }
+    .legal-copy p, .legal-copy li { color: #c3d2d7; font-size: 13px; }
+    .legal-copy p { margin: 0; }
+    .legal-copy ul { margin: 8px 0 0; padding-right: 20px; }
+    .legal-warning { padding: 12px 14px; color: #eedba5; border: 1px solid rgba(244,199,90,.25); border-radius: 13px; background: rgba(244,199,90,.07); }
+    .color-0 { --card-color: #45d7df; }
+    .color-1 { --card-color: #f4c75a; }
+    .color-2 { --card-color: #9d7aff; }
+    .color-3 { --card-color: #ff7e8b; }
+    .color-4 { --card-color: #60d394; }
+    .color-5 { --card-color: #5b8cff; }
+
+    footer { padding: 28px 0 96px; border-top: 1px solid var(--line); background: rgba(4,14,19,.62); }
+    .footer-inner { display: grid; grid-template-columns: auto minmax(320px, 1fr) auto; align-items: center; gap: 24px; }
+    .footer-brand { display: flex; align-items: center; gap: 11px; }
+    .footer-brand img { width: 40px; height: 40px; object-fit: cover; border-radius: 11px; }
+    .footer-brand strong { display: block; }
+    .footer-brand small, .footer-meta { color: var(--muted); font-size: 11px; }
+    .footer-meta { text-align: left; }
+    .footer-legal { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 14px; }
+    .footer-legal button { padding: 3px 0; color: #bdcfd5; border: 0; background: none; font-size: 11px; }
+    .footer-legal button:hover { color: var(--cyan); text-decoration: underline; }
+    .business-gate { grid-column: 1 / -1; padding-top: 14px; color: #d4c38f; text-align: center; border-top: 1px solid var(--line); font-size: 11px; }
+
+    dialog {
+      width: min(680px, calc(100% - 24px));
+      max-height: min(88vh, 840px);
+      overflow: auto;
+      padding: 0;
+      color: var(--text);
+      border: 1px solid rgba(69,215,223,.25);
+      border-radius: 24px;
+      background: #0c1e27;
+      box-shadow: 0 30px 100px rgba(0,0,0,.65);
+    }
+    dialog::backdrop { background: rgba(0,7,10,.78); backdrop-filter: blur(6px); }
+    .modal-head {
+      position: sticky;
+      top: 0;
+      z-index: 4;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 21px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(12,30,39,.95);
+      backdrop-filter: blur(12px);
+    }
+    .modal-head h2 { margin: 0; font-size: 20px; }
+    .close-btn { font-size: 25px; line-height: 1; }
+    .modal-body { padding: 22px; }
+    .modal-foot {
+      position: sticky;
+      bottom: 0;
+      z-index: 3;
+      display: flex;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 9px;
+      padding: 16px 21px;
+      border-top: 1px solid var(--line);
+      background: rgba(12,30,39,.96);
+    }
+    .modal-form { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-field { display: grid; gap: 7px; }
+    .form-field.wide { grid-column: 1 / -1; }
+    .form-field label, .form-field > span { color: #d7e7eb; font-size: 13px; font-weight: 800; }
+    .help { color: var(--muted); font-size: 11px; }
+    .form-error { min-height: 20px; margin: 10px 0 0; color: #ff9aa4; font-size: 12px; }
+    .auth-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+    .auth-tab { min-height: 44px; color: var(--muted); border: 1px solid var(--line); border-radius: 12px; background: transparent; font-weight: 900; }
+    .auth-tab[aria-selected="true"] { color: #041317; border-color: var(--cyan); background: var(--cyan); }
+    .auth-note { margin: 0 0 17px; padding: 12px 14px; color: #c5d5da; border: 1px solid var(--line); border-radius: 13px; background: rgba(69,215,223,.05); font-size: 12px; }
+    .detail-visual { min-height: 230px; display: grid; place-items: center; border-radius: 18px; background: radial-gradient(circle, rgba(69,215,223,.18), transparent 55%), #091921; overflow: hidden; }
+    .detail-visual img { width: 100%; height: 270px; object-fit: cover; }
+    .detail-emoji { font-size: 86px; }
+    .detail-tags { display: flex; flex-wrap: wrap; gap: 7px; margin: 18px 0 8px; }
+    .detail-tag { padding: 6px 9px; color: #c9f3f5; border: 1px solid rgba(69,215,223,.2); border-radius: 999px; background: rgba(69,215,223,.07); font-size: 11px; font-weight: 800; }
+    .detail-title { margin: 8px 0; font-size: 24px; }
+    .detail-description { color: var(--muted); white-space: pre-wrap; }
+    .detail-price { margin-top: 18px; color: var(--gold); font-size: 30px; font-weight: 900; }
+    .profile-card { display: grid; grid-template-columns: auto 1fr; gap: 15px; align-items: center; padding: 17px; border: 1px solid var(--line); border-radius: 17px; background: var(--bg-soft); }
+    .avatar { width: 58px; height: 58px; display: grid; place-items: center; color: #031014; border-radius: 18px; background: linear-gradient(135deg, var(--cyan), #9af0f3); font-size: 23px; font-weight: 900; }
+    .profile-card h3 { margin: 0; }
+    .profile-card p { margin: 3px 0 0; color: var(--muted); font-size: 12px; word-break: break-word; }
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-top: 15px; }
+    .stat-card { padding: 14px; text-align: center; border: 1px solid var(--line); border-radius: 14px; background: rgba(17,41,52,.65); }
+    .stat-card strong { display: block; color: var(--cyan); font-size: 23px; }
+    .stat-card span { color: var(--muted); font-size: 11px; }
+    .admin-list { display: grid; gap: 9px; margin-top: 18px; }
+    .admin-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; padding: 12px; border: 1px solid var(--line); border-radius: 13px; background: var(--bg-soft); }
+    .admin-row strong { display: block; font-size: 13px; }
+    .admin-row small { color: var(--muted); font-size: 10px; }
+
+    .toast-region { position: fixed; z-index: 100; left: 16px; bottom: 20px; display: grid; gap: 8px; width: min(360px, calc(100% - 32px)); pointer-events: none; }
+    .toast {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px;
+      align-items: center;
+      padding: 13px 14px;
+      color: #effcff;
+      border: 1px solid rgba(69,215,223,.25);
+      border-radius: 14px;
+      background: rgba(12,30,39,.97);
+      box-shadow: 0 18px 45px rgba(0,0,0,.38);
+      animation: toast-in .25s ease both;
+      pointer-events: auto;
+      font-size: 13px;
+    }
+    .toast.success { border-color: rgba(78,212,138,.35); }
+    .toast.error { border-color: rgba(255,107,120,.38); }
+    .toast-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 13px currentColor; }
+    .toast.success .toast-dot { background: var(--green); }
+    .toast.error .toast-dot { background: var(--red); }
+    @keyframes toast-in { from { opacity: 0; transform: translateY(12px); } }
+
+    .mobile-nav { display: none; }
+    .filter-drawer-backdrop { display: none; }
+
+    @media (max-width: 1080px) {
+      .topbar-inner { grid-template-columns: auto 1fr; }
+      .header-search { grid-row: 2; grid-column: 1 / -1; margin-bottom: 13px; }
+      .topbar { position: relative; }
+      .hero { padding-top: 30px; }
+      .market-layout { grid-template-columns: 240px minmax(0, 1fr); }
+      .listing-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .category-strip { grid-template-columns: repeat(6, 155px); }
+    }
+
+    @media (max-width: 820px) {
+      :root { --header-h: 70px; }
+      .shell { width: min(100% - 24px, 1220px); }
+      .topbar { position: sticky; }
+      .topbar-inner { min-height: 70px; grid-template-columns: 1fr auto; gap: 10px; }
+      .brand-logo { width: 43px; height: 43px; }
+      .brand-copy small { display: none; }
+      .header-actions .account-label, .header-actions .add-label { display: none; }
+      .header-actions .btn { width: 44px; padding: 0; }
+      .header-search { margin-bottom: 11px; }
+      .hero { padding-top: 20px; }
+      .hero-card { grid-template-columns: 1fr; min-height: 0; padding: 31px; }
+      .hero-visual { display: none; }
+      .hero h1 { letter-spacing: -1.2px; }
+      .market-layout { display: block; }
+      .filters {
+        position: fixed;
+        z-index: 80;
+        top: 0;
+        right: 0;
+        width: min(360px, 90vw);
+        height: 100dvh;
+        overflow: auto;
+        border-radius: 22px 0 0 22px;
+        transform: translateX(105%);
+        transition: transform .24s ease;
+      }
+      .filters.open { transform: translateX(0); }
+      .filter-drawer-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 70;
+        display: block;
+        background: rgba(0,7,10,.7);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity .2s ease;
+      }
+      .filter-drawer-backdrop.open { opacity: 1; pointer-events: auto; }
+      .mobile-filter-btn { display: inline-flex; }
+      .section-heading { align-items: flex-start; }
+      .steps-grid { grid-template-columns: 1fr; }
+      .safety-grid { grid-template-columns: 1fr; }
+      .footer-inner { grid-template-columns: 1fr; align-items: flex-start; }
+      .footer-legal { justify-content: flex-start; }
+      .footer-meta { text-align: right; }
+      .business-gate { grid-column: auto; text-align: right; }
+    }
+
+    @media (max-width: 560px) {
+      body { padding-bottom: 72px; }
+      .shell { width: min(100% - 20px, 1220px); }
+      .brand-name { font-size: 18px; }
+      .topbar-inner { gap: 7px; }
+      .header-actions { gap: 6px; }
+      .hero-card { padding: 25px 20px; border-radius: 24px; }
+      .hero h1 { font-size: 36px; }
+      .hero-copy > p { font-size: 15px; }
+      .hero-actions { display: grid; grid-template-columns: 1fr; }
+      .hero-actions .btn { width: 100%; }
+      .hero-trust { display: grid; gap: 9px; }
+      .section { padding-bottom: 52px; }
+      .section-heading { display: block; }
+      .results-meta { margin-top: 7px; }
+      .category-strip { margin-inline: -10px; padding-inline: 10px; }
+      .listing-toolbar { align-items: stretch; flex-direction: column; }
+      .view-tabs { display: grid; grid-template-columns: repeat(3, 1fr); }
+      .tab-btn { padding-inline: 6px; font-size: 11px; }
+      .sort-field { width: 100%; }
+      .listing-grid { grid-template-columns: 1fr; }
+      .card-media { height: 190px; }
+      .modal-form { grid-template-columns: 1fr; }
+      .form-field.wide { grid-column: auto; }
+      .modal-foot .btn { flex: 1; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .policy-grid { grid-template-columns: 1fr; }
+      footer { padding-bottom: 24px; }
+      .toast-region { bottom: 84px; }
+      .mobile-nav {
+        position: fixed;
+        z-index: 55;
+        right: 10px;
+        bottom: max(9px, env(safe-area-inset-bottom));
+        left: 10px;
+        min-height: 61px;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        padding: 6px;
+        border: 1px solid rgba(69,215,223,.2);
+        border-radius: 19px;
+        background: rgba(8,24,32,.94);
+        box-shadow: 0 16px 50px rgba(0,0,0,.46);
+        backdrop-filter: blur(16px);
+      }
+      .mobile-nav button {
+        min-width: 0;
+        min-height: 48px;
+        display: grid;
+        place-items: center;
+        gap: 2px;
+        color: var(--muted);
+        border: 0;
+        border-radius: 13px;
+        background: transparent;
+        font-size: 9px;
+      }
+      .mobile-nav button svg { width: 20px; height: 20px; }
+      .mobile-nav button.active { color: var(--cyan); background: rgba(69,215,223,.09); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+    .content-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+    .content-card { overflow:hidden; padding:20px; border:1px solid var(--line); border-radius:20px; background:var(--panel); }
+    .content-card h3 { margin:10px 0 8px; }
+    .content-card p { margin:0; color:var(--muted); line-height:1.8; }
+    .content-meta { color:var(--cyan); font-size:11px; font-weight:800; }
+    .ad-card { border-color:rgba(244,199,90,.28); background:linear-gradient(145deg,rgba(244,199,90,.07),var(--panel)); }
+    .purchase-options { display:grid; gap:10px; margin-top:14px; }
+    .purchase-option { display:grid; grid-template-columns:auto 1fr; gap:10px; padding:14px; border:1px solid var(--line); border-radius:14px; background:var(--bg-soft); cursor:pointer; }
+    .purchase-option:has(input:checked) { border-color:var(--cyan); box-shadow:0 0 0 3px rgba(69,215,223,.08); }
+    .purchase-option strong,.purchase-option small { display:block; }
+    .purchase-option small { margin-top:4px; color:var(--muted); }
+    .fee-summary { display:grid; gap:6px; margin-top:12px; padding:13px; border:1px solid var(--line); border-radius:13px; }
+    .fee-summary div { display:flex; justify-content:space-between; }
+    .admin-dialog { width:min(1040px,calc(100% - 24px)); }
+    .admin-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+    .admin-pane { display:none; }
+    .admin-pane.active { display:block; }
+    .admin-actions { display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end; }
+    .status-chip { display:inline-flex; padding:4px 8px; border-radius:999px; color:var(--cyan); background:rgba(69,215,223,.09); font-size:10px; font-weight:900; }
+    @media (max-width:820px) { .content-grid { grid-template-columns:1fr; } .admin-row { grid-template-columns:1fr; } }
+  </style>
 </head>
 <body>
+  <a class="skip-link" href="#marketplace">انتقل إلى الإعلانات</a>
+  <div class="prelaunch-banner" role="status">نسخة ما قبل الإطلاق — الدفع والتسليم والحفظ السحابي غير مفعّلة حتى اكتمال التوثيق والربط الآمن.</div>
+
   <header class="topbar">
-    <div class="brand">
-      <div class="brand-mark">LZ</div>
-      <div>
-        <strong>LOOT<span>.zone</span></strong>
-        <small>السوق الرقمي للاعبين</small>
+    <div class="shell topbar-inner">
+      <a class="brand" href="#home" aria-label="LootZone - الصفحة الرئيسية">
+        <img class="brand-logo js-logo" src="data:image/webp;base64,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" alt="شعار LootZone">
+        <span class="brand-copy">
+          <strong class="brand-name">Loot<span>Zone</span></strong>
+          <small>سوق الألعاب الرقمية</small>
+        </span>
+      </a>
+
+      <label class="header-search" aria-label="البحث في الإعلانات">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+        <input id="searchInput" type="search" autocomplete="off" placeholder="ابحث باسم اللعبة أو الإعلان...">
+      </label>
+
+      <div class="header-actions">
+        <button id="addListingTop" class="btn btn-primary" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+          <span class="add-label">أضف إعلانك</span>
+        </button>
+        <button id="accountButton" class="btn btn-secondary" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg>
+          <span id="accountLabel" class="account-label">تسجيل الدخول</span>
+        </button>
       </div>
     </div>
-    <div class="search-wrap">
-      <span>⌕</span>
-      <input id="searchInput" type="search" placeholder="ابحث عن العناصر بالعنوان..." />
-    </div>
-    <button id="adminBtn" class="ghost-btn">لوحة التحكم</button>
   </header>
 
-  <main class="page-shell">
-    <aside class="sidebar">
-      <h2>تصفية النتائج</h2>
-
-      <section>
-        <h3>الفئة</h3>
-        <div id="categoryFilters" class="filter-list"></div>
-      </section>
-
-      <section>
-        <h3>عنوان اللعبة</h3>
-        <select id="gameFilter">
-          <option value="">كل الألعاب</option>
-        </select>
-      </section>
-
-      <section>
-        <h3>نطاق السعر</h3>
-        <div class="price-row">
-          <input id="minPrice" type="number" min="0" placeholder="من" />
-          <input id="maxPrice" type="number" min="0" placeholder="إلى" />
+  <main id="home">
+    <section class="hero">
+      <div class="shell">
+        <div class="hero-card">
+          <div class="hero-copy">
+            <div class="eyebrow"><span class="eyebrow-dot"></span> سوق عربي لعروض الألعاب والمنتجات الرقمية</div>
+            <h1>منطقة اللاعبين<br><span>لعروض أوضح وآمنة</span></h1>
+            <p>اكتشف حسابات الألعاب والبطاقات والأكواد والخدمات الرقمية، مع ضوابط ملكية وتسليم ونزاعات واضحة لحماية البائع والمشتري.</p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#marketplace">
+                تصفح الإعلانات
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+              </a>
+              <button id="heroAddListing" class="btn btn-secondary" type="button">ابدأ البيع الآن</button>
+            </div>
+            <div class="hero-trust">
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg> واجهة عربية متجاوبة</span>
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg> بحث وفلاتر متقدمة</span>
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg> ضوابط واضحة للمنتجات المحظورة</span>
+            </div>
+          </div>
+          <div class="hero-visual" aria-hidden="true">
+            <div class="logo-frame">
+              <img class="js-logo" src="data:image/webp;base64,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" alt="">
+              <div class="floating-pill">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7 9 18l-5-5"></path></svg>
+                Digital Gaming Marketplace
+              </div>
+            </div>
+          </div>
         </div>
-      </section>
-
-      <button id="applyFilters" class="primary-btn full">تطبيق التصفية</button>
-      <button id="clearFilters" class="outline-btn full">مسح التصفية</button>
-
-      <nav class="side-nav">
-        <span>لوحة التحكم</span>
-        <a href="#" id="myListingsLink">إعلاناتي</a>
-        <a href="#" id="addListingLink">إضافة إعلان</a>
-        <a href="#">الملف الشخصي</a>
-      </nav>
-    </aside>
-
-    <section class="content">
-      <section class="hero">
-        <div>
-          <h1>سوق الغنائم النخبوي للاعبين</h1>
-          <p>اشترِ وبِع العناصر والحسابات والأصول الرقمية بأمان وسرعة.</p>
-        </div>
-        <div class="hero-logo">LOOT<br><span>.zone</span></div>
-      </section>
-
-      <div class="section-title">
-        <h2>العناصر المتاحة</h2>
-        <span id="resultsCount"></span>
       </div>
+    </section>
 
-      <div id="listingGrid" class="listing-grid"></div>
-      <div id="emptyState" class="empty-state" hidden>
-        <h3>لا توجد نتائج مطابقة</h3>
-        <p>جرّب تغيير الفئة أو اللعبة أو نطاق السعر.</p>
+    <section id="marketplace" class="section">
+      <div class="shell">
+        <div class="section-heading">
+          <div>
+            <h2>سوق LootZone</h2>
+            <p>اختر الفئة المناسبة واكتشف العروض المتاحة.</p>
+          </div>
+          <div class="results-meta">عرض <strong id="resultCount">0</strong> إعلان</div>
+        </div>
+
+        <div id="categoryStrip" class="category-strip" role="group" aria-label="فئات الإعلانات"></div>
+
+        <div class="market-layout">
+          <aside id="filtersPanel" class="filters" aria-label="تصفية الإعلانات">
+            <div class="filters-head">
+              <h3>تصفية النتائج</h3>
+              <button id="clearFilters" class="clear-btn" type="button">مسح الكل</button>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label" for="gameFilter">اللعبة</label>
+              <select id="gameFilter" class="field"><option value="">كل الألعاب</option></select>
+            </div>
+            <div class="filter-group">
+              <span class="filter-label">نطاق السعر (ر.س)</span>
+              <div class="price-fields">
+                <label><span class="help">من</span><input id="minPrice" class="field" type="number" min="0" inputmode="decimal" placeholder="0"></label>
+                <label><span class="help">إلى</span><input id="maxPrice" class="field" type="number" min="0" inputmode="decimal" placeholder="بدون حد"></label>
+              </div>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label" for="categorySelect">الفئة</label>
+              <select id="categorySelect" class="field"><option value="">كل الفئات</option></select>
+            </div>
+            <button id="applyFilters" class="btn btn-primary full-width" type="button">تطبيق التصفية</button>
+          </aside>
+
+          <div id="filterBackdrop" class="filter-drawer-backdrop" aria-hidden="true"></div>
+
+          <section aria-label="قائمة الإعلانات">
+            <div class="listing-toolbar">
+              <div class="view-tabs" role="tablist" aria-label="نوع العرض">
+                <button class="tab-btn" type="button" role="tab" data-view="all" aria-selected="true">كل الإعلانات</button>
+                <button class="tab-btn" type="button" role="tab" data-view="favorites" aria-selected="false">المفضلة</button>
+                <button class="tab-btn" type="button" role="tab" data-view="mine" aria-selected="false">إعلاناتي</button>
+              </div>
+              <div class="toolbar-actions">
+                <button id="mobileFilterButton" class="btn btn-secondary mobile-filter-btn" type="button" aria-expanded="false" aria-controls="filtersPanel">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"></path></svg>
+                  الفلاتر
+                </button>
+                <label>
+                  <span class="help" hidden>ترتيب النتائج</span>
+                  <select id="sortSelect" class="field sort-field" aria-label="ترتيب النتائج">
+                    <option value="latest">الأحدث أولًا</option>
+                    <option value="low">السعر: الأقل</option>
+                    <option value="high">السعر: الأعلى</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+
+            <div id="listingGrid" class="listing-grid"></div>
+            <div id="emptyState" class="empty-state" hidden>
+              <div>
+                <div class="empty-icon">⌕</div>
+                <h3 id="emptyTitle">لا توجد نتائج مطابقة</h3>
+                <p id="emptyText">جرّب تغيير البحث أو الفلاتر المستخدمة.</p>
+                <button id="emptyAction" class="btn btn-primary" type="button">مسح الفلاتر</button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section id="how" class="section">
+      <div class="shell">
+        <div class="section-heading">
+          <div><h2>كيف يعمل LootZone؟</h2><p>ثلاث خطوات بسيطة لعرض منتجات الألعاب الرقمية.</p></div>
+        </div>
+        <div class="steps-grid">
+          <article class="info-card">
+            <span class="step-num">01</span>
+            <div class="info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></div>
+            <h3>أنشئ حسابك</h3>
+            <p>سجّل بياناتك الأساسية للوصول إلى إدارة إعلاناتك وطلباتك.</p>
+          </article>
+          <article class="info-card">
+            <span class="step-num">02</span>
+            <div class="info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></div>
+            <h3>أضف إعلانك</h3>
+            <p>اختر اللعبة والفئة والسعر، ثم اكتب وصفًا واضحًا للعرض.</p>
+          </article>
+          <article class="info-card">
+            <span class="step-num">03</span>
+            <div class="info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16v12H4z"></path><path d="M8 7V5h8v2M8 12h8"></path></svg></div>
+            <h3>استقبل الطلبات</h3>
+            <p>تابع طلبات الشراء التجريبية من حسابك وتحقق من تفاصيلها.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="news" class="section">
+      <div class="shell">
+        <div class="section-heading"><div><h2>أخبار وفعاليات الألعاب</h2><p>محتوى تحريري منفصل عن الإعلانات المدفوعة.</p></div><button id="adminPreviewButton" class="btn btn-secondary" type="button">لوحة الإدارة</button></div>
+        <div id="newsGrid" class="content-grid"></div>
+      </div>
+    </section>
+
+    <section id="commercial-ads" class="section">
+      <div class="shell">
+        <div class="section-heading"><div><h2>إعلانات تجارية</h2><p>مساحات مدفوعة تخضع للمراجعة قبل النشر.</p></div><button id="requestCommercialAd" class="btn btn-gold" type="button">اطلب مساحة إعلانية</button></div>
+        <div id="commercialAdsGrid" class="content-grid"></div>
+      </div>
+    </section>
+
+    <section id="safety" class="section">
+      <div class="shell safety-grid">
+        <div class="safety-panel">
+          <h2>ضوابط ثقة قبل تفعيل البيع</h2>
+          <p>أضيفت قواعد المنصة والسياسات الأساسية لتقليل الاحتيال والعروض المخالفة، مع بقاء المعاملات المالية موقوفة في هذه النسخة.</p>
+          <div class="check-list">
+            <div class="check-item"><span class="check-mark">✓</span><span>ضوابط خاصة لملكية الحسابات وتسليمها وضمان عدم استردادها بعد البيع.</span></div>
+            <div class="check-item"><span class="check-mark">✓</span><span>مسودات للخصوصية والاسترجاع والتسليم والشكاوى والمواد المحظورة.</span></div>
+            <div class="check-item"><span class="check-mark">✓</span><span>إبلاغ عن الإعلانات، تحقق أقوى من النماذج، ومنع تنفيذ HTML المدخل.</span></div>
+          </div>
+        </div>
+        <aside class="safety-panel alpha-note" aria-labelledby="launchGateTitle">
+          <span class="tag">Release Candidate 2.4.0</span>
+          <h3 id="launchGateTitle">بوابة الإطلاق الآمن</h3>
+          <p>الحسابات والإعلانات والبلاغات الحالية محفوظة محليًا على هذا الجهاز فقط. لا تُفعّل البيع العام قبل ربط خادم وقاعدة بيانات ومزوّد دفع مرخّص وتوثيق المنشأة.</p>
+          <button class="btn btn-gold full-width top-gap" type="button" data-legal="launch">متطلبات الإطلاق الرسمي</button>
+        </aside>
       </div>
     </section>
   </main>
 
-  <dialog id="detailDialog" class="modal"></dialog>
-
-  <dialog id="adminDialog" class="modal admin-modal">
-    <form id="listingForm" method="dialog">
-      <div class="modal-header">
-        <h2>إضافة إعلان جديد</h2>
-        <button type="button" class="icon-btn" data-close>×</button>
+  <footer>
+    <div class="shell footer-inner">
+      <div class="footer-brand">
+        <img class="js-logo" src="data:image/webp;base64,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" alt="شعار LootZone">
+        <div><strong>LootZone</strong><small>Digital Gaming Marketplace</small></div>
       </div>
+      <nav class="footer-legal" aria-label="سياسات LootZone">
+        <button type="button" data-legal="terms">الشروط والأحكام</button>
+        <button type="button" data-legal="privacy">الخصوصية</button>
+        <button type="button" data-legal="refunds">الاسترجاع واسترداد الأموال</button>
+        <button type="button" data-legal="delivery">التسليم الرقمي</button>
+        <button type="button" data-legal="complaints">الشكاوى والمقترحات</button>
+        <button type="button" data-legal="prohibited">المنتجات المحظورة</button>
+        <button type="button" data-legal="security">الأمان</button>
+      </nav>
+      <div class="footer-meta">© 2026 LootZone<br>Release Candidate 2.4.0</div>
+      <div class="business-gate">بيانات المنشأة والسجل التجاري والرقم الضريبي وقنوات الدعم الرسمية: يجب إضافتها وتوثيقها قبل تفعيل أي بيع أو دفع.</div>
+    </div>
+  </footer>
 
-      <div class="form-grid">
-        <label>عنوان الإعلان
-          <input name="title" required />
-        </label>
-        <label>الفئة
-          <select name="category" required></select>
-        </label>
-        <label>اللعبة
-          <input name="game" required />
-        </label>
-        <label>السعر بالريال
-          <input name="price" type="number" min="0" step="0.01" required />
-        </label>
-        <label class="wide">رابط الصورة
-          <input name="image" type="url" placeholder="https://..." />
-        </label>
-        <label class="wide">الوصف
-          <textarea name="description" rows="4" required></textarea>
-        </label>
-      </div>
+  <nav class="mobile-nav" aria-label="التنقل السريع">
+    <button class="active" type="button" data-mobile-action="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m3 11 9-8 9 8"></path><path d="M5 10v10h14V10"></path></svg><span>الرئيسية</span></button>
+    <button type="button" data-mobile-action="market"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16v13H4z"></path><path d="M7 7V4h10v3"></path></svg><span>السوق</span></button>
+    <button type="button" data-mobile-action="add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg><span>إضافة</span></button>
+    <button type="button" data-mobile-action="account"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg><span>حسابي</span></button>
+  </nav>
 
-      <div class="modal-actions">
-        <button type="button" class="outline-btn" data-close>إلغاء</button>
-        <button type="submit" class="primary-btn">حفظ الإعلان</button>
+  <dialog id="authDialog" aria-labelledby="authTitle">
+    <div class="modal-head"><h2 id="authTitle">حساب LootZone</h2><button class="icon-btn close-btn" type="button" data-close-dialog="authDialog" aria-label="إغلاق">×</button></div>
+    <div class="modal-body">
+      <div class="auth-tabs" role="tablist" aria-label="التسجيل والدخول">
+        <button id="loginTab" class="auth-tab" type="button" role="tab" aria-selected="true">تسجيل الدخول</button>
+        <button id="registerTab" class="auth-tab" type="button" role="tab" aria-selected="false">إنشاء حساب</button>
       </div>
+      <p class="auth-note">حساب محلي للاختبار فقط؛ لا توجد مصادقة خادمية أو استعادة كلمة مرور أو مزامنة بين الأجهزة في هذه النسخة.</p>
+      <form id="authForm">
+        <div class="modal-form">
+          <div id="nameField" class="form-field wide" hidden>
+            <label for="authName">الاسم</label>
+            <input id="authName" class="field" name="name" type="text" maxlength="60" autocomplete="name" placeholder="اكتب اسمك">
+          </div>
+          <div class="form-field wide">
+            <label for="authEmail">البريد الإلكتروني</label>
+            <input id="authEmail" class="field" name="email" type="email" maxlength="120" autocomplete="email" required placeholder="name@example.com">
+          </div>
+          <div class="form-field wide">
+            <label for="authPassword">كلمة المرور</label>
+            <input id="authPassword" class="field" name="password" type="password" minlength="12" maxlength="72" autocomplete="current-password" required placeholder="12 حرفًا على الأقل">
+            <span class="help">استخدم 12 حرفًا على الأقل، تتضمن حرفًا ورقمًا.</span>
+          </div>
+          <div id="passwordConfirmField" class="form-field wide" hidden>
+            <label for="authPasswordConfirm">تأكيد كلمة المرور</label>
+            <input id="authPasswordConfirm" class="field" name="passwordConfirm" type="password" minlength="12" maxlength="72" autocomplete="new-password" placeholder="أعد كتابة كلمة المرور">
+          </div>
+          <div id="legalAcceptanceField" class="checkbox-row wide" hidden>
+            <input id="legalAccepted" name="legalAccepted" type="checkbox">
+            <div><label for="legalAccepted">قرأت وأوافق على الشروط والأحكام وسياسة الخصوصية.</label><div class="help"><button type="button" data-legal="terms">الشروط والأحكام</button> · <button type="button" data-legal="privacy">سياسة الخصوصية</button></div></div>
+          </div>
+        </div>
+        <p id="authError" class="form-error" role="alert"></p>
+        <button id="authSubmit" class="btn btn-primary full-width" type="submit">دخول</button>
+      </form>
+    </div>
+  </dialog>
+
+  <dialog id="listingDialog" aria-labelledby="listingDialogTitle">
+    <form id="listingForm">
+      <div class="modal-head"><h2 id="listingDialogTitle">إضافة إعلان جديد</h2><button class="icon-btn close-btn" type="button" data-close-dialog="listingDialog" aria-label="إغلاق">×</button></div>
+      <div class="modal-body">
+        <input id="listingId" name="id" type="hidden">
+        <div class="modal-form">
+          <div class="form-field wide"><label for="listingTitle">عنوان الإعلان</label><input id="listingTitle" class="field" name="title" type="text" required maxlength="90" placeholder="مثال: جلسة تدريب فردية لمدة 60 دقيقة"></div>
+          <div class="form-field"><label for="listingCategory">الفئة</label><select id="listingCategory" class="field" name="category" required></select></div>
+          <div class="form-field"><label for="listingGame">اللعبة أو المنصة</label><input id="listingGame" class="field" name="game" type="text" required maxlength="50" placeholder="اسم اللعبة أو المنصة"></div>
+          <div class="form-field"><label for="listingPrice">السعر بالريال</label><input id="listingPrice" class="field" name="price" type="number" min="1" max="999999" step="0.01" inputmode="decimal" required placeholder="0.00"></div>
+          <div class="form-field"><label for="listingIcon">الرمز</label><select id="listingIcon" class="field" name="icon"><option>🎮</option><option>🛡️</option><option>💎</option><option>🎁</option><option>🏆</option><option>⚔️</option><option>🪙</option><option>🚀</option></select></div>
+          <div class="form-field wide"><label for="listingImage">رابط صورة اختياري</label><input id="listingImage" class="field" name="image" type="url" maxlength="500" placeholder="https://..."><span class="help">لخصوصيتك، تُقبل روابط HTTPS فقط. في الإنتاج يجب رفع الصور إلى تخزين خاضع للمنصة.</span></div>
+          <div class="form-field wide"><label for="listingDescription">وصف الإعلان</label><textarea id="listingDescription" class="field" name="description" required maxlength="500" placeholder="اكتب تفاصيل واضحة عن العرض..."></textarea></div>
+          <div class="checkbox-row wide">
+            <input id="listingPolicy" name="listingPolicy" type="checkbox" required>
+            <div><label for="listingPolicy">أقر بملكيتي أو تفويضي النظامي للعرض، وبصحة جميع بياناته، وبمسؤوليتي عن الالتزام بالأنظمة وشروط ناشر اللعبة وسياسات LootZone.</label><div class="help"><button type="button" data-legal="prohibited">اقرأ المواد المحظورة</button></div></div>
+          </div>
+        </div>
+        <p id="listingError" class="form-error" role="alert"></p>
+      </div>
+      <div class="modal-foot"><button class="btn btn-secondary" type="button" data-close-dialog="listingDialog">إلغاء</button><button class="btn btn-primary" type="submit">حفظ الإعلان</button></div>
     </form>
   </dialog>
 
-  <script src="app.js"></script>
+  <dialog id="detailDialog" aria-labelledby="detailDialogTitle">
+    <div class="modal-head"><h2 id="detailDialogTitle">تفاصيل الإعلان</h2><button class="icon-btn close-btn" type="button" data-close-dialog="detailDialog" aria-label="إغلاق">×</button></div>
+    <div id="detailContent" class="modal-body"></div>
+    <div class="modal-foot"><button class="btn btn-secondary" type="button" data-close-dialog="detailDialog">إغلاق</button><button id="detailReportButton" class="btn btn-quiet" type="button">إبلاغ</button><button id="detailEditButton" class="btn btn-secondary" type="button" hidden>تعديل</button><button id="detailDeleteButton" class="btn btn-danger" type="button" hidden>حذف</button><button id="detailBuyButton" class="btn btn-gold" type="button">طلب تجريبي</button></div>
+  </dialog>
+
+  <dialog id="accountDialog" aria-labelledby="accountDialogTitle">
+    <div class="modal-head"><h2 id="accountDialogTitle">حسابي</h2><button class="icon-btn close-btn" type="button" data-close-dialog="accountDialog" aria-label="إغلاق">×</button></div>
+    <div id="accountContent" class="modal-body"></div>
+    <div class="modal-foot"><button id="resetDataButton" class="btn btn-quiet" type="button">إعادة ضبط المعاينة</button><button id="deleteAccountButton" class="btn btn-danger" type="button">حذف حسابي المحلي</button><button id="logoutButton" class="btn btn-secondary" type="button">تسجيل الخروج</button><button class="btn btn-primary" type="button" data-close-dialog="accountDialog">تم</button></div>
+  </dialog>
+
+  <dialog id="purchaseDialog" aria-labelledby="purchaseDialogTitle">
+    <form id="purchaseForm">
+      <div class="modal-head"><h2 id="purchaseDialogTitle">طلب شراء تجريبي</h2><button class="icon-btn close-btn" type="button" data-close-dialog="purchaseDialog" aria-label="إغلاق">×</button></div>
+      <div id="purchaseContent" class="modal-body"></div>
+      <div class="modal-foot"><button class="btn btn-secondary" type="button" data-close-dialog="purchaseDialog">إلغاء</button><button class="btn btn-gold" type="submit">تأكيد الطلب التجريبي</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="commercialAdDialog" aria-labelledby="commercialAdTitle">
+    <form id="commercialAdForm">
+      <div class="modal-head"><h2 id="commercialAdTitle">طلب إعلان تجاري</h2><button class="icon-btn close-btn" type="button" data-close-dialog="commercialAdDialog" aria-label="إغلاق">×</button></div>
+      <div class="modal-body">
+        <p class="auth-note">يُرسل الطلب للمراجعة، ولا يُنشر تلقائيًا. التسعير والدفع غير مفعّلين في هذه المعاينة.</p>
+        <div class="modal-form">
+          <div class="form-field wide"><label for="commercialAdName">اسم المعلن</label><input id="commercialAdName" class="field" name="name" required maxlength="60"></div>
+          <div class="form-field wide"><label for="commercialAdTitleInput">عنوان الإعلان</label><input id="commercialAdTitleInput" class="field" name="title" required maxlength="90"></div>
+          <div class="form-field"><label for="commercialAdPlacement">الموضع</label><select id="commercialAdPlacement" class="field" name="placement"><option value="home">الرئيسية</option><option value="market">السوق</option><option value="news">الأخبار</option></select></div>
+          <div class="form-field"><label for="commercialAdDuration">المدة بالأيام</label><input id="commercialAdDuration" class="field" name="duration" type="number" min="1" max="90" value="7" required></div>
+          <div class="form-field wide"><label for="commercialAdUrl">رابط HTTPS اختياري</label><input id="commercialAdUrl" class="field" name="url" type="url" maxlength="500" placeholder="https://..."></div>
+          <div class="form-field wide"><label for="commercialAdDescription">الوصف</label><textarea id="commercialAdDescription" class="field" name="description" required maxlength="300"></textarea></div>
+        </div>
+        <p id="commercialAdError" class="form-error" role="alert"></p>
+      </div>
+      <div class="modal-foot"><button class="btn btn-secondary" type="button" data-close-dialog="commercialAdDialog">إلغاء</button><button class="btn btn-gold" type="submit">إرسال للمراجعة</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="adminDialog" class="admin-dialog" aria-labelledby="adminDialogTitle">
+    <div class="modal-head"><h2 id="adminDialogTitle">لوحة تحكم الإدارة — معاينة محلية</h2><button class="icon-btn close-btn" type="button" data-close-dialog="adminDialog" aria-label="إغلاق">×</button></div>
+    <div class="modal-body">
+      <p class="auth-note">هذه لوحة تجريبية محلية وليست صلاحية إدارية حقيقية. الإطلاق الرسمي يتطلب دخولًا خادميًا، 2FA، أدوارًا وصلاحيات، وسجل تدقيق غير قابل للعبث.</p>
+      <div id="adminStats" class="stats-grid"></div>
+      <div class="admin-tabs"><button class="btn btn-secondary" type="button" data-admin-tab="listings">الإعلانات</button><button class="btn btn-secondary" type="button" data-admin-tab="news">الأخبار</button><button class="btn btn-secondary" type="button" data-admin-tab="ads">الإعلانات التجارية</button><button class="btn btn-secondary" type="button" data-admin-tab="orders">الطلبات والرسوم</button></div>
+      <div id="adminListingsPane" class="admin-pane active"></div>
+      <div id="adminNewsPane" class="admin-pane"></div>
+      <div id="adminAdsPane" class="admin-pane"></div>
+      <div id="adminOrdersPane" class="admin-pane"></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-primary" type="button" data-close-dialog="adminDialog">تم</button></div>
+  </dialog>
+
+  <dialog id="reportDialog" aria-labelledby="reportDialogTitle">
+    <form id="reportForm">
+      <div class="modal-head"><h2 id="reportDialogTitle">الإبلاغ عن إعلان</h2><button class="icon-btn close-btn" type="button" data-close-dialog="reportDialog" aria-label="إغلاق">×</button></div>
+      <div class="modal-body">
+        <p class="auth-note">يُحفظ البلاغ محليًا في نسخة المعاينة. عند الإطلاق يجب إرساله إلى نظام مراجعة خادمي مع رقم متابعة.</p>
+        <div class="modal-form">
+          <div class="form-field wide"><label for="reportReason">سبب البلاغ</label><select id="reportReason" class="field" name="reason" required><option value="">اختر السبب</option><option value="prohibited">منتج أو خدمة محظورة</option><option value="fraud">اشتباه احتيال</option><option value="copyright">انتهاك ملكية فكرية</option><option value="misleading">وصف مضلل</option><option value="other">سبب آخر</option></select></div>
+          <div class="form-field wide"><label for="reportDetails">تفاصيل إضافية</label><textarea id="reportDetails" class="field" name="details" maxlength="500" placeholder="اشرح المشكلة دون كتابة كلمات مرور أو بيانات مالية..."></textarea></div>
+        </div>
+        <p id="reportError" class="form-error" role="alert"></p>
+      </div>
+      <div class="modal-foot"><button class="btn btn-secondary" type="button" data-close-dialog="reportDialog">إلغاء</button><button class="btn btn-danger" type="submit">إرسال البلاغ التجريبي</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="legalDialog" aria-labelledby="legalDialogTitle">
+    <div class="modal-head"><h2 id="legalDialogTitle">سياسات LootZone</h2><button class="icon-btn close-btn" type="button" data-close-dialog="legalDialog" aria-label="إغلاق">×</button></div>
+    <div id="legalContent" class="modal-body legal-copy"></div>
+    <div class="modal-foot"><button class="btn btn-primary" type="button" data-close-dialog="legalDialog">تم</button></div>
+  </dialog>
+
+  <div id="toastRegion" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const STORAGE_KEY = "lootzone-rc-2.3-state";
+      const TERMS_VERSION = "2026-08-05.2";
+      const COLORS = ["#45d7df", "#f4c75a", "#9d7aff", "#ff7e8b", "#60d394", "#5b8cff"];
+      const CATEGORIES = [
+        { id: "accounts", name: "حسابات الألعاب", icon: "🛡️" },
+        { id: "cards", name: "بطاقات وأكواد رسمية", icon: "🎁" },
+        { id: "coaching", name: "تدريب وتطوير مهارات", icon: "🏆" },
+        { id: "creator", name: "أصول رقمية للمبدعين", icon: "🎨" },
+        { id: "services", name: "خدمات مجتمع الألعاب", icon: "🧩" },
+        { id: "licensed", name: "منتجات رقمية مرخصة", icon: "✓" },
+        { id: "other", name: "أخرى", icon: "🎮" }
+      ];
+
+      const DEFAULT_LISTINGS = [
+        { id: 2307, title: "حساب ألعاب موضح المواصفات — نموذج عرض", category: "accounts", game: "ألعاب متعددة", price: 70, description: "نموذج لفئة الحسابات. يجب على البائع إثبات الملكية والمصدر المشروع، وذكر المنصة والمنطقة وقابلية تغيير البريد ومدة الضمان وجميع المواصفات بدقة.", icon: "🛡️", color: "#45d7df", ownerId: "lootzone-demo-store", ownerName: "متجر تجريبي", image: "", createdAt: 1786035600000 },
+        { id: 2306, title: "بطاقة PlayStation Store سعودية — نموذج عرض", category: "cards", game: "PlayStation", price: 100, description: "نموذج لبطاقة رقمية رسمية غير مستخدمة. يجب التحقق من المصدر والمنطقة وحالة الرمز قبل النشر الفعلي.", icon: "🎁", color: "#5b8cff", ownerId: "lootzone-demo-store", ownerName: "متجر تجريبي", image: "", createdAt: 1786032000000 },
+        { id: 2305, title: "جلسة تدريب فردية لمدة 60 دقيقة", category: "coaching", game: "Valorant", price: 75, description: "جلسة تدريب مباشرة لتحسين التصويب واتخاذ القرار، دون طلب بيانات الدخول أو التحكم بحساب اللاعب.", icon: "🏆", color: "#45d7df", ownerId: "lootzone-demo-store", ownerName: "مدرب تجريبي", image: "", createdAt: 1786028400000 },
+        { id: 2304, title: "حزمة واجهات بث عربية للألعاب", category: "creator", game: "OBS / Twitch", price: 55, description: "واجهات بث رقمية أصلية مع ترخيص استخدام شخصي واضح. الصور المعروضة للاختبار فقط.", icon: "🎨", color: "#9d7aff", ownerId: "lootzone-demo-store", ownerName: "مصمم تجريبي", image: "", createdAt: 1786024800000 },
+        { id: 2303, title: "تنظيم بطولة مجتمعية صغيرة", category: "services", game: "Discord", price: 180, description: "إعداد القواعد والجدول وقنوات التواصل لبطولة مجتمعية، دون تحصيل جوائز مالية في نسخة المعاينة.", icon: "🧩", color: "#60d394", ownerId: "lootzone-demo-store", ownerName: "منظم تجريبي", image: "", createdAt: 1786021200000 },
+        { id: 2302, title: "حزمة مؤثرات صوتية مرخصة للبث", category: "licensed", game: "Streaming", price: 35, description: "ملفات صوتية أصلية مع بيان نطاق الترخيص. يمنع رفع أو بيع أي محتوى منسوخ أو غير مملوك للبائع.", icon: "✓", color: "#f4c75a", ownerId: "lootzone-demo-store", ownerName: "استوديو تجريبي", image: "", createdAt: 1786017600000 },
+        { id: 2301, title: "استشارة إعداد بث مباشر للمبتدئين", category: "services", game: "OBS", price: 60, description: "جلسة إرشادية لضبط إعدادات البث والأداء والخصوصية، دون وصول دائم إلى الجهاز أو مشاركة كلمات المرور.", icon: "🚀", color: "#ff7e8b", ownerId: "lootzone-demo-store", ownerName: "خبير تجريبي", image: "", createdAt: 1786014000000 }
+      ];
+
+      const DEFAULT_USERS = [];
+      const DEFAULT_NEWS = [
+        { id: 2402, title: "تحديثات LootZone قبل الإطلاق", summary: "إضافة لوحة أخبار مستقلة، مراجعة الإعلانات التجارية، وخيارات شراء أكثر وضوحًا.", published: true, publishedAt: 1786500000000 },
+        { id: 2401, title: "دليل حماية حسابات الألعاب", summary: "لا تشارك رمز التحقق أو كلمة المرور، وتحقق من شروط ناشر اللعبة قبل أي عملية.", published: true, publishedAt: 1786413600000 }
+      ];
+      const DEFAULT_COMMERCIAL_ADS = [
+        { id: 2410, name: "شريك تجريبي", title: "مساحة إعلانية متاحة", description: "يمكن للمتاجر ومجتمعات الألعاب طلب مساحة مدفوعة تخضع للمراجعة.", placement: "home", duration: 7, price: 0, url: "", status: "approved", createdAt: 1786500000000 }
+      ];
+      const PROTECTED_FEES = { accounts: 0.06, cards: 0.03, coaching: 0.05, creator: 0.04, services: 0.05, licensed: 0.03, other: 0.04 };
+
+      const LEGAL_CONTENT = {
+        launch: {
+          title: "متطلبات الإطلاق الرسمي",
+          warning: "هذه الحزمة واجهة آمنة للمعاينة وليست متجرًا تشغيليًا. لا تفعّل الدفع أو تستقبل بيانات عملاء حقيقية قبل إكمال البنود التالية.",
+          sections: [
+            ["هوية المنشأة", "إضافة الاسم النظامي، رقم السجل التجاري، الرقم الضريبي عند انطباقه، العنوان، وسائل التواصل الرسمية، وتوثيق رابط المتجر في السجل ومنصة المركز السعودي للأعمال."],
+            ["الخادم والحسابات", "نقل التسجيل والإعلانات والطلبات والبلاغات من localStorage إلى خادم وقاعدة بيانات؛ تفعيل بريد موثّق، استعادة كلمة المرور، جلسات آمنة، صلاحيات خادمية، سجل تدقيق، حدود للطلبات ومكافحة الروبوتات."],
+            ["الدفع والتسليم", "التعاقد مع مزوّد دفع مرخّص، عدم تخزين بيانات البطاقات، إصدار رقم طلب وفاتورة نظامية، وحجز المبلغ أو تسوية واضحة مع إثبات التسليم ومسار للنزاع والاسترداد."],
+            ["حماية البيانات", "اعتماد سياسة خصوصية نهائية ببيانات جهة التحكم، المسوغ والغرض ومدد الاحتفاظ وحقوق الوصول والتصحيح والإتلاف، إدارة التسرب ونقل البيانات خارج المملكة، واتفاقيات جهات المعالجة."],
+            ["تشغيل السوق", "تحقق البائعين، مراجعة الإعلانات، قائمة محظورات مرتبطة بشروط كل ناشر، حقوق ملكية فكرية، مكافحة الاحتيال وغسل الأموال، دعم عملاء، وشروط عمر مناسبة."],
+            ["اختبارات ما قبل النشر", "فحص أمني مستقل، اختبار اختراق، نسخ احتياطي واستعادة، مراقبة وتنبيه، اختبارات وصول وأداء وجوال، وخطة استجابة للحوادث." ]
+          ]
+        },
+        terms: {
+          title: "الشروط والأحكام — مسودة ما قبل الإطلاق",
+          warning: "تحتاج هذه المسودة مراجعة محامٍ سعودي وإضافة بيانات المنشأة قبل اعتمادها. إنشاء الحساب يعني قبول النسخة السارية من هذه الشروط وسياسة الخصوصية، ولا تُعد نسخة المعاينة الحالية عملية دفع أو عقد بيع منفذًا.",
+          sections: [
+            ["نطاق الخدمة", "LootZone سوق إلكتروني وسيط يتيح للبائعين نشر عروضهم وللمشترين طلبها. ما لم يُذكر أن LootZone هو البائع، فإن عقد البيع يكون بين البائع والمشتري، مع بقاء التزامات المنصة النظامية وحقوق المستهلك الآمرة دون انتقاص. في نسخة المعاينة لا توجد مدفوعات أو تسليم فعلي والبيانات محفوظة على جهاز المستخدم فقط."],
+            ["الأهلية والحساب", "يشترط لإنشاء الحساب أن يكون المستخدم قد أتم 18 عامًا وأن يكون كامل الأهلية النظامية، أو يستخدم الخدمة بواسطة وليه أو ممثله النظامي متى سمحت المنصة بذلك. يقر المستخدم عند التسجيل بصحة هذه الأهلية وبصحة بياناته، ويحافظ على سرية دخوله، ويمنع انتحال الهوية أو إنشاء حسابات للتحايل."],
+            ["الموافقة والإثبات", "بالضغط على إنشاء الحساب بعد تحديد مربع الموافقة، يوافق المستخدم على النسخة الظاهرة من الشروط وسياسة الخصوصية. تحفظ النسخة التشغيلية رقم إصدار الشروط ووقت الموافقة ومعرف الحساب وسجلات الأمان اللازمة لإثباتها، ويُطلب قبول جديد عند أي تعديل جوهري."],
+            ["التزامات البائع", "يضمن البائع ملكيته أو تفويضه النظامي للعرض، ودقة العنوان والصور والوصف والسعر والمخزون والمنطقة والمنصة ومدة التسليم والضمان، ويحظر إنشاء ندرة أو خصم أو تقييم غير حقيقي. يلتزم بإثبات المصدر والوفاء بحقوق المستهلك والضرائب والأنظمة وشروط ناشر اللعبة، ويتحمل نتائج البيانات المضللة أو انتهاك حقوق الغير."],
+            ["بيع حسابات الألعاب", "يجوز عرض حساب لعبة بعد بيان اللعبة والمنصة والمنطقة ومحتوياته وقابلية تغيير البريد ووسائل الاسترداد وسجل الحظر ومدة الضمان. يقر البائع بأنه المالك المشروع وأن الحساب غير مسروق أو مسترد أو مرتبط بحقوق للغير، ويلتزم بإزالة بياناته ووسائل دفعه وعدم استعادة الحساب بعد التسليم. يجب إظهار أي منع أو مخاطرة ناشئة عن شروط الناشر قبل الشراء، ولا تمثل LootZone ناشر اللعبة ولا تضمن استمرار الحساب إذا عوقب بسبب مخالفة لم يفصح عنها البائع."],
+            ["التزامات المشتري", "يتحقق المشتري قبل الطلب من اللعبة والمنصة والمنطقة والمواصفات والقيود وشروط الناشر ومدة الضمان. يستخدم قناة الدفع والتسليم داخل المنصة عند تشغيلها، ويغير بيانات الأمان فور التسليم، ولا ينقل التواصل أو الدفع خارجها بقصد تجاوز الحماية أو الرسوم أو سجل النزاع."],
+            ["الملكية الفكرية", "لا يجوز نشر محتوى أو علامات أو أكواد أو ملفات لا يملك المستخدم حق بيعها أو ترخيصها. للمنصة تعليق العرض عند الاشتباه أو ورود بلاغ موثوق."],
+            ["التسليم والنزاع", "يجب أن يتم التسليم داخل قناة موثقة، ولا تظهر بيانات الدخول في الإعلان العام. يحق للمنصة حجز التسوية لدى مزود الدفع عند الاشتباه، وطلب الأدلة، وتعليق العرض أو الحساب، ورد المبلغ عند عدم التسليم أو عدم المطابقة أو استرداد البائع للحساب، وفق السياسة والأنظمة المطبقة."],
+            ["حدود المسؤولية", "لا تسري أي حدود أو استبعادات للمسؤولية على الغش أو الخطأ الجسيم أو الحقوق التي لا يجوز التنازل عنها نظامًا. وفي غير ذلك لا تتحمل المنصة خسائر ناشئة عن تعامل خارجها أو معلومات أخفاها المستخدم أو إجراء اتخذه ناشر اللعبة بسبب مخالفة البائع أو المشتري لشروطه."],
+            ["القانون والشكاوى", "تخضع الخدمة لأنظمة المملكة العربية السعودية. يبدأ النزاع بتقديم شكوى موثقة عبر قناة الدعم دون أن يحد ذلك من حق المستهلك في الرجوع إلى الجهات الرسمية أو المحاكم المختصة في المملكة." ]
+          ]
+        },
+        privacy: {
+          title: "سياسة الخصوصية — مسودة ما قبل الإطلاق",
+          warning: "في هذه النسخة تحفظ بيانات الحساب والإعلانات والطلبات والبلاغات داخل متصفحك فقط. مسح بيانات الموقع يحذفها، ولا تنتقل إلى أجهزة أخرى.",
+          sections: [
+            ["البيانات والغرض", "قد تشمل النسخة التشغيلية الاسم والبريد وبيانات الحساب والإعلانات والطلبات والبلاغات وسجلات الأمان. تُجمع لتقديم الخدمة، منع الاحتيال، الدعم، والامتثال النظامي وفق مسوغ محدد."],
+            ["الحد الأدنى والاحتفاظ", "لا تجمع المنصة إلا البيانات اللازمة، وتحدد مدة احتفاظ لكل فئة ثم تحذفها أو تخفي هويتها، مع مراعاة الالتزامات المحاسبية والنظامية والنزاعات."],
+            ["المشاركة والنقل", "لا تباع البيانات الشخصية. قد تعالجها جهات استضافة ودفع ودعم موثوقة بعقود حماية. يجب توثيق أي نقل خارج المملكة وتوفير مستوى الحماية المطلوب نظامًا."],
+            ["حقوق المستخدم", "يحق للمستخدم العلم والوصول والحصول على نسخة والتصحيح وطلب الإتلاف والعدول عن الموافقة متى كان ذلك منطبقًا، عبر قناة خصوصية رسمية تُضاف قبل الإطلاق."],
+            ["الأمان والتسرب", "تتطلب النسخة التشغيلية تشفير النقل والبيانات الحساسة، صلاحيات محدودة، سجلات تدقيق، نسخًا احتياطية، واكتشافًا وإشعارًا للحوادث وفق المتطلبات النظامية."],
+            ["بيانات جهة التحكم", "يجب قبل الإطلاق إدراج الاسم النظامي لجهة التحكم وبيانات التواصل ومسؤول حماية البيانات إن لزم، وأغراض المعالجة ومدد الاحتفاظ وآلية ممارسة الحقوق." ]
+          ]
+        },
+        refunds: {
+          title: "الاستبدال والاسترجاع واسترداد الأموال — مسودة",
+          warning: "لا توجد مبالغ مدفوعة في نسخة المعاينة. السياسة التالية إطار يجب ربطه فعليًا بنظام الطلب والدفع قبل الإطلاق.",
+          sections: [
+            ["قبل التسليم", "يحق للمشتري طلب الإلغاء قبل بدء تجهيز أو كشف الرمز الرقمي، ويعاد المبلغ إلى وسيلة الدفع الأصلية وفق مدة معالجة مزوّد الدفع."],
+            ["بعد التسليم الرقمي", "تراجع الطلبات إذا كان المنتج غير مطابق للوصف أو غير صالح عند التسليم، مع تقديم دليل خلال المهلة المعلنة. قد لا يقبل الاسترجاع لمجرد تغيير الرأي بعد كشف رمز صالح أو تنزيل ملف."],
+            ["المنتج المعيب أو المضلل", "إذا ثبت العيب أو التضليل أو عدم التسليم، يعاد المبلغ أو يوفر بديل مناسب وفق اختيار المستهلك وما تقرره الأنظمة."],
+            ["مسار النزاع", "يُفتح نزاع برقم الطلب، ويُحفظ المبلغ لدى مزوّد الدفع المرخّص حتى تحقق الاستلام متى تم اعتماد نموذج الحجز، مع توثيق الأدلة والقرار ووسيلة الاعتراض." ]
+          ]
+        },
+        delivery: {
+          title: "سياسة التسليم الرقمي — مسودة",
+          warning: "التسليم غير مفعّل في نسخة المعاينة الحالية.",
+          sections: [
+            ["معلومات ما قبل الطلب", "يعرض الإعلان نوع المنتج والمنطقة والمنصة والمتطلبات والسعر الإجمالي والمدة المتوقعة للتسليم قبل إبرام العقد."],
+            ["قناة التسليم", "يتم التسليم داخل صفحة الطلب أو عبر قناة موثقة تابعة للمنصة. يمنع نشر كلمات المرور أو رموز التحقق أو بيانات الدفع في الإعلان أو المحادثات العامة؛ ولا تكشف بيانات الحساب للمشتري إلا عبر قناة التسليم الآمنة بعد تأكيد الدفع."],
+            ["إثبات التسليم", "يسجل النظام وقت التسليم وحالة الرمز أو الملف أو الحساب، وقابلية الدخول وتغيير بيانات الأمان، وتأكيد الاستلام والأدلة المرتبطة، مع منع كشف بيانات شخصية غير لازمة."],
+            ["التأخير", "يتمكن المشتري من الإلغاء واسترداد المبلغ عند تجاوز المدة النظامية أو المعلنة دون تنفيذ، مع إشعارات واضحة بتغير حالة الطلب." ]
+          ]
+        },
+        complaints: {
+          title: "سياسة الشكاوى والمقترحات — مسودة",
+          warning: "يجب إضافة بريد ورقم دعم رسميين ونظام تذاكر قبل الإطلاق؛ البلاغات الحالية محلية ولا تصل إلى فريق دعم.",
+          sections: [
+            ["تقديم الشكوى", "تُقدم الشكوى برقم الطلب ووصف المشكلة والأدلة دون مشاركة كلمات مرور أو بيانات بطاقات. يحصل العميل على رقم متابعة وتاريخ استلام."],
+            ["مدة الاستجابة", "تُحدد وتعلن مدة أول رد ومدة الحل حسب نوع الشكوى، ويُشعر العميل بأي تمديد وسببه ومسار التصعيد."],
+            ["الاعتراض والتصعيد", "يمكن الاعتراض على القرار ضمن مهلة معلنة. ولا يحد المسار الداخلي من حق المستهلك في اللجوء إلى الجهات الرسمية المختصة."],
+            ["المقترحات", "تستخدم المقترحات لتحسين الخدمة دون ربطها ببيانات شخصية أكثر من اللازم، ولا تستخدم للتسويق إلا بموافقة مستقلة." ]
+          ]
+        },
+        prohibited: {
+          title: "المنتجات والخدمات المحظورة",
+          warning: "تطبق شروط ناشر اللعبة إضافة إلى هذه القائمة. وجود عرض في الموقع لا يعني أن الناشر يسمح به.",
+          sections: [
+            ["الحسابات المحظورة", "يمنع عرض حساب مسروق أو مخترق أو مسترد أو مجهول المصدر، أو حساب لا يملك البائع حق التصرف فيه، أو إخفاء قيود النقل والحظر والمنطقة. كما يمنع الحساب العشوائي أو مجهول المواصفات، ونشر كلمات المرور أو رموز التحقق في الإعلان العام."],
+            ["التطوير غير المسموح", "يمنع رفع الرتبة أو اللعب نيابة عن المستخدم أو الغش أو البوتات أو الاستغلال أو التحايل على أنظمة اللعبة والحظر الجغرافي."],
+            ["العملات والعناصر", "يمنع بيع العملات أو العناصر خارج القنوات التي يسمح بها ناشر اللعبة صراحة. يجب تقديم دليل على قابلية النقل ومصدر مشروع عند السماح."],
+            ["الأكواد والبطاقات", "يمنع بيع الأكواد المسروقة أو المستخدمة أو مجهولة المصدر أو المقيدة بطرق دفع أو مناطق لم يفصح عنها البائع."],
+            ["الملكية الفكرية والأمن", "يمنع المحتوى المقرصن والملفات الخبيثة والروابط الاحتيالية وانتهاك العلامات والحقوق، والمنتجات غير النظامية أو المضللة."],
+            ["المعاملات خارج المنصة", "يمنع طلب تحويل مباشر أو تواصل خارجي بقصد تجاوز الحماية أو الرسوم أو سجل النزاع عند تشغيل الدفع." ]
+          ]
+        },
+        security: {
+          title: "إرشادات الأمان",
+          warning: "لن يطلب LootZone كلمة مرور لعبة أو رمز تحقق أو بيانات بطاقة عبر محادثة أو إعلان.",
+          sections: [
+            ["حماية الحساب", "استخدم كلمة مرور فريدة وطويلة، وفعل التحقق الإضافي عند توفره، ولا تشارك الرموز أو روابط الاستعادة."],
+            ["الدفع", "استخدم بوابة الدفع الرسمية فقط. عند الإطلاق يجب أن تعالج البطاقة لدى مزوّد مرخص وألا يخزن LootZone أرقام البطاقات الكاملة."],
+            ["الاحتيال", "توقف عند طلب تحويل خارجي أو استعجال غير معتاد أو سعر غير منطقي أو طلب بيانات دخول، وأبلغ عن الإعلان من زر الإبلاغ."],
+            ["الأجهزة والروابط", "تحقق من اسم النطاق وHTTPS، وحدّث جهازك ومتصفحك، ولا تنزل ملفات تنفيذية من إعلان غير موثوق." ]
+          ]
+        }
+      };
+
+      const $ = (id) => document.getElementById(id);
+      const els = {
+        search: $("searchInput"),
+        categoryStrip: $("categoryStrip"),
+        categorySelect: $("categorySelect"),
+        game: $("gameFilter"),
+        min: $("minPrice"),
+        max: $("maxPrice"),
+        sort: $("sortSelect"),
+        grid: $("listingGrid"),
+        count: $("resultCount"),
+        empty: $("emptyState"),
+        emptyTitle: $("emptyTitle"),
+        emptyText: $("emptyText"),
+        filters: $("filtersPanel"),
+        backdrop: $("filterBackdrop")
+      };
+
+      let state = loadState();
+      let activeCategory = "";
+      let viewMode = "all";
+      let authMode = "login";
+      let activeListingId = null;
+
+      function cloneDefaults() {
+        return {
+          listings: DEFAULT_LISTINGS.map(item => ({ ...item })),
+          users: DEFAULT_USERS.map(item => ({ ...item })),
+          currentUserId: null,
+          favorites: [],
+          requests: [],
+          reports: [],
+          news: DEFAULT_NEWS.map(item => ({ ...item })),
+          commercialAds: DEFAULT_COMMERCIAL_ADS.map(item => ({ ...item })),
+          auditLog: []
+        };
+      }
+
+      function loadState() {
+        const fallback = cloneDefaults();
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return fallback;
+          const parsed = JSON.parse(raw);
+          return {
+            listings: Array.isArray(parsed.listings) ? parsed.listings.filter(validListing).map(normalizeListing) : fallback.listings,
+            users: Array.isArray(parsed.users) ? parsed.users.filter(validUser).map(normalizeUser) : fallback.users,
+            currentUserId: typeof parsed.currentUserId === "string" ? parsed.currentUserId : null,
+            favorites: Array.isArray(parsed.favorites) ? parsed.favorites.filter(Number.isFinite) : [],
+            requests: Array.isArray(parsed.requests) ? parsed.requests.filter(item => item && Number.isFinite(Number(item.id))) : [],
+            reports: Array.isArray(parsed.reports) ? parsed.reports.filter(item => item && Number.isFinite(Number(item.id))) : [],
+            news: Array.isArray(parsed.news) ? parsed.news : fallback.news,
+            commercialAds: Array.isArray(parsed.commercialAds) ? parsed.commercialAds : fallback.commercialAds,
+            auditLog: Array.isArray(parsed.auditLog) ? parsed.auditLog.slice(0, 100) : []
+          };
+        } catch (_) {
+          return fallback;
+        }
+      }
+
+      function validListing(item) {
+        return item && Number.isFinite(Number(item.id)) && typeof item.title === "string" && typeof item.game === "string" && Number.isFinite(Number(item.price)) && !hasProhibitedListing(item.title, item.game, item.description);
+      }
+
+      function normalizeListing(item) {
+        const category = CATEGORIES.some(cat => cat.id === item.category) ? item.category : "other";
+        return {
+          id: Number(item.id),
+          title: cleanText(item.title, 90) || "إعلان بدون عنوان",
+          category,
+          game: cleanText(item.game, 50) || "أخرى",
+          price: Math.max(0, Number(item.price) || 0),
+          description: cleanText(item.description, 500),
+          icon: cleanText(item.icon, 4) || "🎮",
+          color: safeColor(item.color),
+          ownerId: cleanText(item.ownerId, 80) || "unknown",
+          ownerName: cleanText(item.ownerName, 60) || "مستخدم LootZone",
+          image: safeImageUrl(item.image),
+          createdAt: Number(item.createdAt) || Date.now()
+        };
+      }
+
+      function validUser(item) {
+        return item && typeof item.id === "string" && typeof item.email === "string" && typeof item.name === "string";
+      }
+
+      function normalizeUser(item) {
+        return {
+          id: cleanText(item.id, 80),
+          name: cleanText(item.name, 60) || "مستخدم LootZone",
+          email: cleanText(item.email, 120).toLowerCase(),
+          passwordHash: typeof item.passwordHash === "string" ? item.passwordHash : "",
+          passwordSalt: typeof item.passwordSalt === "string" ? item.passwordSalt : "",
+          passwordIterations: Number.isFinite(Number(item.passwordIterations)) ? Number(item.passwordIterations) : 120000,
+          role: "user",
+          termsAcceptedAt: Number(item.termsAcceptedAt) || 0,
+          termsVersion: cleanText(item.termsVersion, 40),
+          createdAt: Number(item.createdAt) || Date.now()
+        };
+      }
+
+      function saveState() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (_) {
+          toast("تعذر حفظ البيانات على هذا الجهاز.", "error");
+        }
+      }
+
+      function cleanText(value, max) {
+        return String(value ?? "").replace(/[\u0000-\u001F\u007F]/g, " ").replace(/\s+/g, " ").trim().slice(0, max);
+      }
+
+      function normalizeArabic(value) {
+        return cleanText(value, 1000)
+          .toLocaleLowerCase("ar")
+          .replace(/[\u064B-\u065F\u0670]/g, "")
+          .replace(/ـ/g, "")
+          .replace(/[أإآٱ]/g, "ا")
+          .replace(/ى/g, "ي")
+          .replace(/ؤ/g, "و")
+          .replace(/ئ/g, "ي");
+      }
+
+      function bytesToBase64(bytes) {
+        let binary = "";
+        bytes.forEach(byte => { binary += String.fromCharCode(byte); });
+        return window.btoa(binary);
+      }
+
+      function base64ToBytes(value) {
+        const binary = window.atob(value);
+        return Uint8Array.from(binary, character => character.charCodeAt(0));
+      }
+
+      function createSalt() {
+        const bytes = new Uint8Array(16);
+        if (window.crypto?.getRandomValues) window.crypto.getRandomValues(bytes);
+        else bytes.forEach((_, index) => { bytes[index] = (Date.now() + index * 37 + Math.random() * 255) & 255; });
+        return bytesToBase64(bytes);
+      }
+
+      async function derivePassword(password, salt, iterations = 120000) {
+        const value = String(password || "");
+        if (window.crypto?.subtle && window.TextEncoder) {
+          const material = await window.crypto.subtle.importKey("raw", new TextEncoder().encode(value), "PBKDF2", false, ["deriveBits"]);
+          const bits = await window.crypto.subtle.deriveBits({ name: "PBKDF2", hash: "SHA-256", salt: base64ToBytes(salt), iterations }, material, 256);
+          return bytesToBase64(new Uint8Array(bits));
+        }
+        let hash = 2166136261;
+        const combined = `${salt}:${value}`;
+        for (let round = 0; round < 5000; round += 1) {
+          for (let index = 0; index < combined.length; index += 1) {
+            hash ^= combined.charCodeAt(index) + round;
+            hash = Math.imul(hash, 16777619);
+          }
+        }
+        return `local-${(hash >>> 0).toString(16)}`;
+      }
+
+      async function createPasswordRecord(password) {
+        const passwordSalt = createSalt();
+        const passwordIterations = 120000;
+        const passwordHash = await derivePassword(password, passwordSalt, passwordIterations);
+        return { passwordHash, passwordSalt, passwordIterations };
+      }
+
+      function safeColor(value) {
+        const color = String(value || "");
+        return /^#[0-9a-f]{6}$/i.test(color) ? color : COLORS[0];
+      }
+
+      function safeImageUrl(value) {
+        const text = String(value || "").trim();
+        if (!text) return "";
+        try {
+          const url = new URL(text);
+          return url.protocol === "https:" ? url.href : "";
+        } catch (_) {
+          return "";
+        }
+      }
+
+      function hasProhibitedListing(...values) {
+        const text = normalizeArabic(values.join(" "));
+        const patterns = [
+          /بيانات\s+دخول/,
+          /كلمه\s+مرور/,
+          /رمز\s+تحقق/,
+          /حساب\s+(مسروق|مخترق|مهكر|مسترد)/,
+          /(مسروق|مخترق|مهكر|مسترد)\s+حساب/,
+          /حساب\s+عشوايي/,
+          /رفع\s+(ال)?رتبه/,
+          /تطوير\s+(ال)?رتبه/,
+          /اللعب\s+نيابه/,
+          /شحن\s+(عملات|يوسي|uc|v.?bucks|rp)/i,
+          /(stolen|hacked|recovered)\s+account/i,
+          /rank\s*boost/i
+        ];
+        return patterns.some(pattern => pattern.test(text));
+      }
+
+      function currentUser() {
+        return state.users.find(user => user.id === state.currentUserId) || null;
+      }
+
+      function categoryName(id) {
+        return CATEGORIES.find(cat => cat.id === id)?.name || "أخرى";
+      }
+
+      function money(value) {
+        const number = Number(value);
+        return Number.isFinite(number) ? new Intl.NumberFormat("ar-SA", { minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(number) : "0";
+      }
+
+      function node(tag, className, text) {
+        const element = document.createElement(tag);
+        if (className) element.className = className;
+        if (text !== undefined) element.textContent = text;
+        return element;
+      }
+
+      function iconSvg(pathMarkup) {
+        const wrapper = document.createElement("span");
+        wrapper.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">${pathMarkup}</svg>`;
+        return wrapper.firstElementChild;
+      }
+
+      function renderCategories() {
+        els.categoryStrip.replaceChildren();
+        const counts = state.listings.reduce((map, item) => {
+          map[item.category] = (map[item.category] || 0) + 1;
+          return map;
+        }, {});
+
+        CATEGORIES.forEach(cat => {
+          const button = node("button", "category-card");
+          button.type = "button";
+          button.dataset.category = cat.id;
+          button.setAttribute("aria-pressed", String(activeCategory === cat.id));
+          const icon = node("span", "cat-icon", cat.icon);
+          const copy = node("span");
+          copy.append(node("strong", "", cat.name), node("small", "", `${counts[cat.id] || 0} إعلانات`));
+          button.append(icon, copy);
+          button.addEventListener("click", () => {
+            activeCategory = activeCategory === cat.id ? "" : cat.id;
+            els.categorySelect.value = activeCategory;
+            renderCategories();
+            renderListings();
+          });
+          els.categoryStrip.append(button);
+        });
+      }
+
+      function fillSelects() {
+        els.categorySelect.replaceChildren(new Option("كل الفئات", ""));
+        $("listingCategory").replaceChildren(new Option("اختر الفئة", ""));
+        CATEGORIES.forEach(cat => {
+          els.categorySelect.add(new Option(cat.name, cat.id));
+          $("listingCategory").add(new Option(cat.name, cat.id));
+        });
+        updateGames();
+      }
+
+      function updateGames() {
+        const selected = els.game.value;
+        const games = [...new Set(state.listings.map(item => item.game).filter(Boolean))].sort((a, b) => a.localeCompare(b, "ar"));
+        els.game.replaceChildren(new Option("كل الألعاب", ""));
+        games.forEach(game => els.game.add(new Option(game, game)));
+        if (games.includes(selected)) els.game.value = selected;
+      }
+
+      function filteredListings() {
+        const query = normalizeArabic(els.search.value).slice(0, 120);
+        const min = els.min.value === "" ? 0 : Number(els.min.value);
+        const max = els.max.value === "" ? Infinity : Number(els.max.value);
+        const user = currentUser();
+
+        let rows = state.listings.filter(item => {
+          const haystack = normalizeArabic(`${item.title} ${item.game} ${item.description} ${categoryName(item.category)}`);
+          if (query && !haystack.includes(query)) return false;
+          if (activeCategory && item.category !== activeCategory) return false;
+          if (els.game.value && item.game !== els.game.value) return false;
+          if (Number.isFinite(min) && item.price < min) return false;
+          if (Number.isFinite(max) && item.price > max) return false;
+          if (viewMode === "favorites" && !state.favorites.includes(item.id)) return false;
+          if (viewMode === "mine" && (!user || item.ownerId !== user.id)) return false;
+          return true;
+        });
+
+        if (els.sort.value === "low") rows.sort((a, b) => a.price - b.price);
+        else if (els.sort.value === "high") rows.sort((a, b) => b.price - a.price);
+        else rows.sort((a, b) => b.createdAt - a.createdAt);
+        return rows;
+      }
+
+      function renderListings() {
+        const rows = filteredListings();
+        els.grid.replaceChildren();
+        els.count.textContent = String(rows.length);
+        els.empty.hidden = rows.length > 0;
+        els.grid.hidden = rows.length === 0;
+
+        if (!rows.length) {
+          if (viewMode === "favorites") {
+            els.emptyTitle.textContent = "المفضلة فارغة";
+            els.emptyText.textContent = "اضغط على رمز القلب في أي إعلان لإضافته هنا.";
+          } else if (viewMode === "mine" && !currentUser()) {
+            els.emptyTitle.textContent = "سجّل الدخول لعرض إعلاناتك";
+            els.emptyText.textContent = "بعد تسجيل الدخول ستتمكن من إضافة إعلاناتك وإدارتها.";
+          } else if (viewMode === "mine") {
+            els.emptyTitle.textContent = "لم تضف أي إعلان بعد";
+            els.emptyText.textContent = "أضف إعلانك الأول وسيظهر هنا مباشرة.";
+          } else {
+            els.emptyTitle.textContent = "لا توجد نتائج مطابقة";
+            els.emptyText.textContent = "جرّب تغيير البحث أو الفلاتر المستخدمة.";
+          }
+        }
+
+        rows.forEach(item => els.grid.append(createListingCard(item)));
+        updateTabs();
+      }
+
+      function createListingCard(item) {
+        const article = node("article", "listing-card");
+        const media = node("div", "card-media");
+        const colorIndex = Math.max(0, COLORS.indexOf(safeColor(item.color)));
+        media.classList.add(`color-${colorIndex}`);
+        if (item.image) {
+          const image = node("img", "card-image");
+          image.src = item.image;
+          image.alt = "";
+          image.loading = "lazy";
+          image.referrerPolicy = "no-referrer";
+          image.addEventListener("error", () => {
+            image.remove();
+            media.append(node("span", "card-emoji", item.icon));
+          }, { once: true });
+          media.append(image);
+        } else {
+          media.append(node("span", "card-emoji", item.icon));
+        }
+        media.append(node("span", "card-badge", categoryName(item.category)));
+
+        const favorite = node("button", "icon-btn favorite-btn");
+        favorite.type = "button";
+        favorite.setAttribute("aria-label", "إضافة إلى المفضلة");
+        favorite.setAttribute("aria-pressed", String(state.favorites.includes(item.id)));
+        favorite.append(iconSvg('<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"></path>'));
+        favorite.addEventListener("click", () => toggleFavorite(item.id));
+        media.append(favorite);
+
+        const body = node("div", "card-body");
+        body.append(node("div", "card-game", item.game), node("h3", "card-title", item.title), node("p", "card-desc", item.description));
+
+        const meta = node("div", "card-meta");
+        const price = node("div", "price");
+        price.append(document.createTextNode(money(item.price) + " "), node("small", "", "ر.س"));
+        const seller = node("div", "seller");
+        seller.append(node("strong", "", item.ownerName), document.createTextNode("هوية تجريبية غير موثقة"));
+        meta.append(price, seller);
+
+        const actions = node("div", "card-actions");
+        const view = node("button", "btn btn-primary", "عرض التفاصيل");
+        view.type = "button";
+        view.addEventListener("click", () => openDetails(item.id));
+        const quick = node("button", "icon-btn");
+        quick.type = "button";
+        quick.setAttribute("aria-label", "طلب شراء الإعلان");
+        quick.append(iconSvg('<path d="M6 7h15l-1.5 9h-12z"></path><path d="M6 7 5 3H2M9 21h.01M18 21h.01"></path>'));
+        quick.addEventListener("click", () => openPurchase(item.id));
+        actions.append(view, quick);
+        body.append(meta, actions);
+        article.append(media, body);
+        return article;
+      }
+
+      function toggleFavorite(id) {
+        const exists = state.favorites.includes(id);
+        state.favorites = exists ? state.favorites.filter(item => item !== id) : [...state.favorites, id];
+        saveState();
+        renderListings();
+        toast(exists ? "تمت إزالة الإعلان من المفضلة." : "تمت إضافة الإعلان إلى المفضلة.", "success");
+      }
+
+      function clearFilters() {
+        activeCategory = "";
+        els.categorySelect.value = "";
+        els.game.value = "";
+        els.min.value = "";
+        els.max.value = "";
+        els.search.value = "";
+        renderCategories();
+        renderListings();
+      }
+
+      function resetMarketplace() {
+        viewMode = "all";
+        activeCategory = "";
+        els.categorySelect.value = "";
+        els.game.value = "";
+        els.min.value = "";
+        els.max.value = "";
+        els.search.value = "";
+        els.sort.value = "latest";
+        renderCategories();
+        renderListings();
+      }
+
+      function validatePriceRange() {
+        const min = els.min.value === "" ? 0 : Number(els.min.value);
+        const max = els.max.value === "" ? Infinity : Number(els.max.value);
+        if (min < 0 || max < 0) {
+          toast("السعر لا يمكن أن يكون سالبًا.", "error");
+          return false;
+        }
+        if (min > max) {
+          toast("قيمة «من» يجب ألا تتجاوز قيمة «إلى».", "error");
+          return false;
+        }
+        return true;
+      }
+
+      function setView(mode) {
+        if (mode === "mine" && !currentUser()) {
+          viewMode = "mine";
+          renderListings();
+          openAuth("login");
+          toast("سجّل الدخول أولًا لعرض إعلاناتك.");
+          return;
+        }
+        viewMode = mode;
+        renderListings();
+      }
+
+      function updateTabs() {
+        document.querySelectorAll("[data-view]").forEach(button => button.setAttribute("aria-selected", String(button.dataset.view === viewMode)));
+      }
+
+      function openAuth(mode = "login") {
+        setAuthMode(mode);
+        $("authError").textContent = "";
+        $("authDialog").showModal();
+        setTimeout(() => $("authEmail").focus(), 60);
+      }
+
+      function setAuthMode(mode) {
+        authMode = mode;
+        const register = mode === "register";
+        $("loginTab").setAttribute("aria-selected", String(!register));
+        $("registerTab").setAttribute("aria-selected", String(register));
+        $("nameField").hidden = !register;
+        $("authName").required = register;
+        $("passwordConfirmField").hidden = !register;
+        $("authPasswordConfirm").required = register;
+        $("legalAcceptanceField").hidden = !register;
+        $("legalAccepted").required = register;
+        if (!register) $("legalAccepted").checked = false;
+        $("authPassword").autocomplete = register ? "new-password" : "current-password";
+        $("authSubmit").textContent = register ? "إنشاء الحساب" : "دخول";
+        $("authError").textContent = "";
+      }
+
+      async function handleAuthSubmit(event) {
+        event.preventDefault();
+        const form = new FormData(event.currentTarget);
+        const email = cleanText(form.get("email"), 120).toLowerCase();
+        const password = String(form.get("password") || "");
+        const passwordConfirm = String(form.get("passwordConfirm") || "");
+        const error = $("authError");
+        if (!/^\S+@\S+\.\S+$/.test(email)) {
+          error.textContent = "أدخل بريدًا إلكترونيًا صحيحًا.";
+          return;
+        }
+        if (password.length < 12 || !/[A-Za-z\u0600-\u06FF]/.test(password) || !/\d/.test(password)) {
+          error.textContent = "استخدم كلمة مرور من 12 حرفًا على الأقل تتضمن حرفًا ورقمًا.";
+          return;
+        }
+
+        if (authMode === "register") {
+          const name = cleanText(form.get("name"), 60);
+          if (name.length < 2) {
+            error.textContent = "أدخل اسمًا لا يقل عن حرفين.";
+            return;
+          }
+          if (state.users.some(user => user.email === email)) {
+            error.textContent = "هذا البريد مسجل على هذا الجهاز. استخدم تسجيل الدخول.";
+            return;
+          }
+          if (password !== passwordConfirm) {
+            error.textContent = "كلمتا المرور غير متطابقتين.";
+            return;
+          }
+          if (form.get("legalAccepted") !== "on") {
+            error.textContent = "يجب قراءة الشروط والخصوصية والموافقة عليهما لإنشاء الحساب التجريبي.";
+            return;
+          }
+          const passwordRecord = await createPasswordRecord(password);
+          const user = { id: `user-${Date.now()}`, name, email, ...passwordRecord, role: "user", termsAcceptedAt: Date.now(), termsVersion: TERMS_VERSION, createdAt: Date.now() };
+          state.users.push(user);
+          state.currentUserId = user.id;
+          toast("تم إنشاء الحساب التجريبي بنجاح.", "success");
+        } else {
+          const user = state.users.find(item => item.email === email);
+          if (!user) {
+            error.textContent = "لا يوجد حساب بهذا البريد على هذا الجهاز.";
+            return;
+          }
+          if (!user.passwordHash || !user.passwordSalt) {
+            error.textContent = "بيانات هذا الحساب التجريبي قديمة. أعد ضبط المعاينة وأنشئ الحساب من جديد.";
+            return;
+          }
+          const passwordHash = await derivePassword(password, user.passwordSalt, user.passwordIterations);
+          if (user.passwordHash !== passwordHash) {
+            error.textContent = "كلمة المرور غير صحيحة.";
+            return;
+          }
+          state.currentUserId = user.id;
+          toast("تم تسجيل الدخول.", "success");
+        }
+        saveState();
+        event.currentTarget.reset();
+        $("authDialog").close();
+        updateAuthUI();
+        resetMarketplace();
+      }
+
+      function updateAuthUI() {
+        const user = currentUser();
+        $("accountLabel").textContent = user ? user.name.split(" ")[0] : "تسجيل الدخول";
+      }
+
+      function requireUser(callback) {
+        if (!currentUser()) {
+          openAuth("login");
+          toast("سجّل الدخول أولًا للمتابعة.");
+          return false;
+        }
+        if (callback) callback();
+        return true;
+      }
+
+      function openListingForm(item = null) {
+        requireUser(() => {
+          $("listingForm").reset();
+          $("listingError").textContent = "";
+          $("listingId").value = item ? String(item.id) : "";
+          $("listingDialogTitle").textContent = item ? "تعديل الإعلان" : "إضافة إعلان جديد";
+          if (item) {
+            $("listingTitle").value = item.title;
+            $("listingCategory").value = item.category;
+            $("listingGame").value = item.game;
+            $("listingPrice").value = String(item.price);
+            $("listingIcon").value = [...$("listingIcon").options].some(option => option.value === item.icon) ? item.icon : "🎮";
+            $("listingImage").value = item.image;
+            $("listingDescription").value = item.description;
+          }
+          $("listingDialog").showModal();
+          setTimeout(() => $("listingTitle").focus(), 60);
+        });
+      }
+
+      function handleListingSubmit(event) {
+        event.preventDefault();
+        const user = currentUser();
+        if (!user) return openAuth();
+        const form = new FormData(event.currentTarget);
+        const id = Number(form.get("id"));
+        const existing = id ? state.listings.find(item => item.id === id) : null;
+        if (existing && existing.ownerId !== user.id) {
+          $("listingError").textContent = "ليست لديك صلاحية تعديل هذا الإعلان.";
+          return;
+        }
+
+        const title = cleanText(form.get("title"), 90);
+        const game = cleanText(form.get("game"), 50);
+        const description = cleanText(form.get("description"), 500);
+        const category = String(form.get("category") || "");
+        const price = Number(form.get("price"));
+        const imageInput = String(form.get("image") || "").trim();
+        const image = safeImageUrl(imageInput);
+        const error = $("listingError");
+
+        if (title.length < 4 || game.length < 2 || description.length < 10) {
+          error.textContent = "أكمل العنوان واسم اللعبة ووصفًا لا يقل عن 10 أحرف.";
+          return;
+        }
+        if (!CATEGORIES.some(cat => cat.id === category)) {
+          error.textContent = "اختر فئة صحيحة.";
+          return;
+        }
+        if (form.get("listingPolicy") !== "on") {
+          error.textContent = "يجب تأكيد الالتزام بقواعد المنتجات المحظورة.";
+          return;
+        }
+        if (hasProhibitedListing(title, game, description)) {
+          error.textContent = "يبدو أن العرض يتضمن بيانات دخول علنية أو حسابًا غير مشروع أو خدمة محظورة. راجع قواعد المنتجات المحظورة.";
+          return;
+        }
+        if (!Number.isFinite(price) || price < 1 || price > 999999) {
+          error.textContent = "أدخل سعرًا صحيحًا من 1 إلى 999,999 ريال.";
+          return;
+        }
+        if (imageInput && !image) {
+          error.textContent = "رابط الصورة غير صحيح. استخدم رابط HTTPS فقط.";
+          return;
+        }
+
+        const data = {
+          id: existing ? existing.id : Date.now(),
+          title,
+          category,
+          game,
+          price,
+          description,
+          icon: cleanText(form.get("icon"), 4) || "🎮",
+          color: existing?.color || COLORS[Math.floor(Math.random() * COLORS.length)],
+          ownerId: existing?.ownerId || user.id,
+          ownerName: existing?.ownerName || user.name,
+          image,
+          createdAt: existing?.createdAt || Date.now()
+        };
+
+        if (existing) state.listings = state.listings.map(item => item.id === existing.id ? data : item);
+        else state.listings.unshift(data);
+        saveState();
+        event.currentTarget.reset();
+        $("listingDialog").close();
+        updateGames();
+        renderCategories();
+        renderListings();
+        toast(existing ? "تم تحديث الإعلان." : "تم نشر الإعلان على هذا الجهاز.", "success");
+      }
+
+      function openDetails(id) {
+        const item = state.listings.find(listing => listing.id === id);
+        if (!item) return;
+        activeListingId = id;
+        const content = $("detailContent");
+        content.replaceChildren();
+        const visual = node("div", "detail-visual");
+        if (item.image) {
+          const image = node("img");
+          image.src = item.image;
+          image.alt = "";
+          image.referrerPolicy = "no-referrer";
+          image.addEventListener("error", () => image.replaceWith(node("span", "detail-emoji", item.icon)), { once: true });
+          visual.append(image);
+        } else visual.append(node("span", "detail-emoji", item.icon));
+        const tags = node("div", "detail-tags");
+        tags.append(node("span", "detail-tag", categoryName(item.category)), node("span", "detail-tag", item.game));
+        content.append(visual, tags, node("h3", "detail-title", item.title), node("p", "detail-description", item.description), node("div", "detail-price", `${money(item.price)} ر.س`));
+        const user = currentUser();
+        const canManage = Boolean(user && user.id === item.ownerId);
+        $("detailEditButton").hidden = !canManage;
+        $("detailDeleteButton").hidden = !canManage;
+        $("detailReportButton").hidden = canManage;
+        $("detailBuyButton").hidden = Boolean(user && user.id === item.ownerId);
+        $("detailDialog").showModal();
+      }
+
+      function editActiveListing() {
+        const item = state.listings.find(listing => listing.id === activeListingId);
+        if (!item) return;
+        $("detailDialog").close();
+        openListingForm(item);
+      }
+
+      function deleteActiveListing() {
+        const item = state.listings.find(listing => listing.id === activeListingId);
+        const user = currentUser();
+        if (!item || !user || item.ownerId !== user.id) return;
+        if (!window.confirm("هل تريد حذف هذا الإعلان من النسخة التجريبية؟")) return;
+        state.listings = state.listings.filter(listing => listing.id !== item.id);
+        state.favorites = state.favorites.filter(id => id !== item.id);
+        saveState();
+        $("detailDialog").close();
+        updateGames();
+        renderCategories();
+        renderListings();
+        toast("تم حذف الإعلان.", "success");
+      }
+
+      function openPurchase(id) {
+        const item = state.listings.find(listing => listing.id === id);
+        if (!item) return;
+        requireUser(() => {
+          activeListingId = id;
+          const content = $("purchaseContent");
+          content.replaceChildren();
+          const note = node("p", "auth-note", "محاكاة محلية فقط: لا يوجد خصم أو حجز مبلغ أو تسليم فعلي في هذه النسخة.");
+          const box = node("div", "profile-card");
+          const icon = node("div", "avatar", item.icon);
+          const copy = node("div");
+          copy.append(node("h3", "", item.title), node("p", "", `${item.game} — ${money(item.price)} ر.س`));
+          box.append(icon, copy);
+          const options = node("div", "purchase-options");
+          options.innerHTML = `<label class="purchase-option"><input type="radio" name="purchaseMode" value="direct" checked><span><strong>شراء مباشر — رسوم خدمة 1%</strong><small>مخاطر أعلى؛ التعامل والتسليم بين الطرفين، ولا تشمل الخدمة حجز المبلغ أو إدارة النزاع.</small></span></label><label class="purchase-option"><input type="radio" name="purchaseMode" value="protected"><span><strong>شراء محمي عبر LootZone</strong><small>رسوم حسب الفئة، مع حجز وتسليم ونزاع عند ربط مزود الدفع والخادم رسميًا.</small></span></label>`;
+          const summary = node("div", "fee-summary");
+          summary.id = "purchaseFeeSummary";
+          content.append(note, box, options, summary);
+          options.addEventListener("change", () => updatePurchaseSummary(item));
+          updatePurchaseSummary(item);
+          $("purchaseDialog").showModal();
+        });
+      }
+
+      function updatePurchaseSummary(item) {
+        const mode = document.querySelector('input[name="purchaseMode"]:checked')?.value || "direct";
+        const rate = mode === "direct" ? 0.01 : (PROTECTED_FEES[item.category] || 0.04);
+        const fee = Math.round(item.price * rate * 100) / 100;
+        const summary = $("purchaseFeeSummary");
+        if (!summary) return;
+        summary.replaceChildren();
+        [["سعر العرض", item.price], [`رسوم الخدمة (${Math.round(rate * 100)}%)`, fee], ["الإجمالي التجريبي", item.price + fee]].forEach(([label, value]) => {
+          const row = node("div"); row.append(node("span", "", label), node("strong", "", `${money(value)} ر.س`)); summary.append(row);
+        });
+      }
+
+      function handlePurchase(event) {
+        event.preventDefault();
+        const user = currentUser();
+        const item = state.listings.find(listing => listing.id === activeListingId);
+        if (!user || !item) return;
+        if (item.ownerId === user.id) return toast("لا يمكنك طلب إعلانك.", "error");
+        if (state.requests.some(request => request.listingId === item.id && request.buyerId === user.id && request.status === "new")) {
+          $("purchaseDialog").close();
+          return toast("لديك طلب تجريبي مفتوح لهذا الإعلان بالفعل.", "error");
+        }
+        const mode = document.querySelector('input[name="purchaseMode"]:checked')?.value || "direct";
+        const feeRate = mode === "direct" ? 0.01 : (PROTECTED_FEES[item.category] || 0.04);
+        const feeAmount = Math.round(item.price * feeRate * 100) / 100;
+        state.requests.unshift({ id: Date.now(), listingId: item.id, buyerId: user.id, sellerId: item.ownerId, mode, feeRate, feeAmount, total: item.price + feeAmount, status: "new", createdAt: Date.now() });
+        saveState();
+        $("purchaseDialog").close();
+        if ($("detailDialog").open) $("detailDialog").close();
+        toast(`تم تسجيل طلب ${mode === "direct" ? "مباشر" : "محمي"} تجريبي.`, "success");
+      }
+
+      function openReport() {
+        const item = state.listings.find(listing => listing.id === activeListingId);
+        if (!item) return;
+        const user = currentUser();
+        if (user && user.id === item.ownerId) return toast("لا يمكنك الإبلاغ عن إعلانك.", "error");
+        $("reportForm").reset();
+        $("reportError").textContent = "";
+        if ($("detailDialog").open) $("detailDialog").close();
+        $("reportDialog").showModal();
+        setTimeout(() => $("reportReason").focus(), 60);
+      }
+
+      function handleReport(event) {
+        event.preventDefault();
+        const form = new FormData(event.currentTarget);
+        const reason = String(form.get("reason") || "");
+        const details = cleanText(form.get("details"), 500);
+        const allowedReasons = ["prohibited", "fraud", "copyright", "misleading", "other"];
+        const error = $("reportError");
+        if (!allowedReasons.includes(reason)) {
+          error.textContent = "اختر سببًا صحيحًا للبلاغ.";
+          return;
+        }
+        const reporterId = currentUser()?.id || "anonymous-local";
+        if (state.reports.some(report => report.listingId === activeListingId && report.reporterId === reporterId && report.status === "open")) {
+          error.textContent = "لديك بلاغ محلي مفتوح لهذا الإعلان بالفعل.";
+          return;
+        }
+        state.reports.unshift({ id: Date.now(), listingId: activeListingId, reporterId, reason, details, status: "open", createdAt: Date.now() });
+        saveState();
+        $("reportDialog").close();
+        toast("تم حفظ البلاغ محليًا للمعاينة. لم يُرسل إلى فريق دعم.", "success");
+      }
+
+      function openLegal(key) {
+        const documentData = LEGAL_CONTENT[key];
+        if (!documentData) return;
+        $("legalDialogTitle").textContent = documentData.title;
+        const content = $("legalContent");
+        content.replaceChildren();
+        if (documentData.warning) content.append(node("p", "legal-warning", documentData.warning));
+        documentData.sections.forEach(([title, paragraph]) => {
+          const section = node("section");
+          section.append(node("h3", "", title), node("p", "", paragraph));
+          content.append(section);
+        });
+        if (!$("legalDialog").open) $("legalDialog").showModal();
+      }
+
+      function openAccount() {
+        const user = currentUser();
+        if (!user) return openAuth("login");
+        const content = $("accountContent");
+        content.replaceChildren();
+        const profile = node("div", "profile-card");
+        const initials = user.name.split(/\s+/).slice(0, 2).map(part => part[0]).join("").toUpperCase();
+        const avatar = node("div", "avatar", initials || "LZ");
+        const copy = node("div");
+        copy.append(node("h3", "", user.name), node("p", "", user.email), node("p", "", "حساب محلي للمعاينة — غير موثّق خادميًا"));
+        profile.append(avatar, copy);
+        content.append(profile);
+
+        const mine = state.listings.filter(item => item.ownerId === user.id).length;
+        const myRequests = state.requests.filter(item => item.buyerId === user.id).length;
+        const incoming = state.requests.filter(item => item.sellerId === user.id).length;
+        const stats = node("div", "stats-grid");
+        [[mine, "إعلاناتي"], [myRequests, "طلباتي"], [incoming, "طلبات واردة"]].forEach(([value, label]) => {
+          const card = node("div", "stat-card");
+          card.append(node("strong", "", String(value)), node("span", "", label));
+          stats.append(card);
+        });
+        content.append(stats);
+
+        const myAds = state.commercialAds.filter(item => item.requesterId === user.id);
+        if (myAds.length) {
+          const list = node("div", "admin-list");
+          list.append(node("h3", "", "طلبات الإعلانات التجارية"));
+          const labels = { pending:"قيد المراجعة", approved:"مقبول", rejected:"مرفوض", stopped:"متوقف", expired:"منتهي" };
+          myAds.forEach(item => list.append(adminRow(item.title, `${labels[item.status] || item.status} · السعر المعتمد ${money(item.price || 0)} ر.س`)));
+          content.append(list);
+        }
+
+        content.append(node("p", "auth-note", "يمكنك حذف حسابك وبياناتك المحلية من هذا الجهاز. في النسخة التشغيلية يجب توفير طلب وصول وتصحيح وإتلاف خادمي برقم متابعة."));
+        $("accountDialog").showModal();
+      }
+
+      function logout() {
+        state.currentUserId = null;
+        saveState();
+        $("accountDialog").close();
+        updateAuthUI();
+        resetMarketplace();
+        toast("تم تسجيل الخروج.", "success");
+      }
+
+      function deleteLocalAccount() {
+        const user = currentUser();
+        if (!user) return;
+        if (!window.confirm("سيُحذف الحساب وإعلاناته وطلباته نهائيًا من هذا المتصفح. هل تريد المتابعة؟")) return;
+        const ownedIds = state.listings.filter(item => item.ownerId === user.id).map(item => item.id);
+        state.listings = state.listings.filter(item => item.ownerId !== user.id);
+        state.users = state.users.filter(item => item.id !== user.id);
+        state.requests = state.requests.filter(item => item.buyerId !== user.id && item.sellerId !== user.id);
+        state.reports = state.reports.filter(item => item.reporterId !== user.id && !ownedIds.includes(item.listingId));
+        state.favorites = state.favorites.filter(id => !ownedIds.includes(id));
+        state.currentUserId = null;
+        saveState();
+        $("accountDialog").close();
+        updateGames();
+        updateAuthUI();
+        resetMarketplace();
+        toast("تم حذف الحساب وبياناته المحلية من هذا المتصفح.", "success");
+      }
+
+      function resetDemo() {
+        if (!window.confirm("سيتم حذف جميع بيانات المعاينة المحلية التي أضفتها على هذا الجهاز. هل تريد المتابعة؟")) return;
+        state = cloneDefaults();
+        saveState();
+        $("accountDialog").close();
+        activeCategory = "";
+        viewMode = "all";
+        fillSelects();
+        clearFilters();
+        updateAuthUI();
+        toast("تمت إعادة نسخة المعاينة إلى حالتها الأصلية.", "success");
+      }
+
+      function toast(message, type = "info") {
+        const item = node("div", `toast ${type}`);
+        item.setAttribute("role", type === "error" ? "alert" : "status");
+        item.append(node("span", "toast-dot"), node("span", "", message));
+        $("toastRegion").append(item);
+        window.setTimeout(() => item.remove(), 3200);
+      }
+
+      function toggleFilters(open) {
+        const shouldOpen = typeof open === "boolean" ? open : !els.filters.classList.contains("open");
+        els.filters.classList.toggle("open", shouldOpen);
+        els.backdrop.classList.toggle("open", shouldOpen);
+        $("mobileFilterButton").setAttribute("aria-expanded", String(shouldOpen));
+        if (shouldOpen) setTimeout(() => els.game.focus(), 80);
+      }
+
+      function renderNews() {
+        const grid = $("newsGrid"); grid.replaceChildren();
+        const items = state.news.filter(item => item && item.published).sort((a,b) => Number(b.publishedAt) - Number(a.publishedAt));
+        items.forEach(item => { const card = node("article", "content-card"); card.append(node("span", "content-meta", new Date(Number(item.publishedAt) || Date.now()).toLocaleDateString("ar-SA")), node("h3", "", cleanText(item.title,90)), node("p", "", cleanText(item.summary,300))); grid.append(card); });
+        if (!items.length) grid.append(node("p", "auth-note", "لا توجد أخبار منشورة حاليًا."));
+      }
+
+      function renderCommercialAds() {
+        const grid = $("commercialAdsGrid"); grid.replaceChildren();
+        const items = state.commercialAds.filter(item => item && item.status === "approved");
+        items.forEach(item => { const card = node("article", "content-card ad-card"); card.append(node("span", "content-meta", "إعلان تجاري مدفوع"), node("h3", "", cleanText(item.title,90)), node("p", "", cleanText(item.description,300)), node("small", "help", `المعلن: ${cleanText(item.name,60)} · ${Number(item.duration)||1} أيام`)); grid.append(card); });
+        if (!items.length) grid.append(node("p", "auth-note", "لا توجد حملات تجارية منشورة حاليًا."));
+      }
+
+      function openCommercialAdRequest() {
+        $("commercialAdForm").reset(); $("commercialAdError").textContent = ""; $("commercialAdDialog").showModal();
+      }
+
+      function handleCommercialAd(event) {
+        event.preventDefault(); const form = new FormData(event.currentTarget);
+        const url = safeImageUrl(form.get("url"));
+        if (form.get("url") && !url) return $("commercialAdError").textContent = "الرابط يجب أن يبدأ بـ HTTPS.";
+        const ad = { id: Date.now(), requesterId: currentUser()?.id || "", name: cleanText(form.get("name"),60), title: cleanText(form.get("title"),90), description: cleanText(form.get("description"),300), placement: cleanText(form.get("placement"),20), duration: Math.min(90,Math.max(1,Number(form.get("duration"))||7)), price: 0, url, status:"pending", createdAt:Date.now() };
+        if (!ad.name || !ad.title || !ad.description) return $("commercialAdError").textContent = "أكمل جميع الحقول المطلوبة.";
+        state.commercialAds.unshift(ad); state.auditLog.unshift({ at:Date.now(), action:"commercial-ad-request", id:ad.id }); saveState();
+        $("commercialAdDialog").close(); renderCommercialAds(); toast("تم استلام طلب الإعلان للمراجعة.","success");
+      }
+
+      function adminRow(title, meta, actions=[]) {
+        const row=node("div","admin-row"), copy=node("div"); copy.append(node("strong","",title),node("small","",meta)); const controls=node("div","admin-actions"); actions.forEach(action=>controls.append(action)); row.append(copy,controls); return row;
+      }
+
+      function renderAdmin() {
+        const stats=$("adminStats"); stats.replaceChildren();
+        [[state.listings.length,"الإعلانات"],[state.users.length,"المستخدمون"],[state.requests.length,"الطلبات"],[state.reports.length,"البلاغات"]].forEach(([value,label])=>{const c=node("div","stat-card");c.append(node("strong","",String(value)),node("span","",label));stats.append(c);});
+        const listings=$("adminListingsPane"); listings.replaceChildren(node("h3","","مراجعة إعلانات السوق"));
+        state.listings.slice(0,30).forEach(item=>{const remove=node("button","btn btn-danger","حذف");remove.type="button";remove.addEventListener("click",()=>{if(!confirm("حذف الإعلان من المعاينة؟"))return;state.listings=state.listings.filter(x=>x.id!==item.id);saveState();renderListings();renderAdmin();}); listings.append(adminRow(item.title,`${item.game} · ${money(item.price)} ر.س`,[remove]));});
+        const news=$("adminNewsPane"); news.replaceChildren(node("h3","","إدارة الأخبار")); const add=node("button","btn btn-primary","إضافة خبر"); add.type="button"; add.addEventListener("click",()=>{const title=cleanText(prompt("عنوان الخبر:"),90);if(!title)return;const summary=cleanText(prompt("ملخص الخبر:"),300);state.news.unshift({id:Date.now(),title,summary,published:false,publishedAt:Date.now()});saveState();renderNews();renderAdmin();});news.append(add);
+        state.news.forEach(item=>{const toggle=node("button","btn btn-secondary",item.published?"إلغاء النشر":"نشر");toggle.type="button";toggle.addEventListener("click",()=>{item.published=!item.published;item.publishedAt=Date.now();saveState();renderNews();renderAdmin();});const del=node("button","btn btn-danger","حذف");del.type="button";del.addEventListener("click",()=>{state.news=state.news.filter(x=>x.id!==item.id);saveState();renderNews();renderAdmin();});news.append(adminRow(cleanText(item.title,90),item.published?"منشور":"مسودة",[toggle,del]));});
+        const ads=$("adminAdsPane"); ads.replaceChildren(node("h3","","طلبات الإعلانات التجارية"));state.commercialAds.forEach(item=>{const approve=node("button","btn btn-primary","قبول");approve.type="button";approve.addEventListener("click",()=>{const price=Number(prompt("السعر الموافق عليه بالريال:",String(item.price||0)));item.price=Math.max(0,price||0);item.status="approved";saveState();renderCommercialAds();renderAdmin();});const reject=node("button","btn btn-danger",item.status==="approved"?"إيقاف":"رفض");reject.type="button";reject.addEventListener("click",()=>{item.status=item.status==="approved"?"stopped":"rejected";saveState();renderCommercialAds();renderAdmin();});ads.append(adminRow(item.title,`${item.name} · ${item.status} · ${item.duration} أيام`,[approve,reject]));});
+        const orders=$("adminOrdersPane"); orders.replaceChildren(node("h3","","الطلبات والرسوم التجريبية"));state.requests.forEach(req=>{const listing=state.listings.find(x=>x.id===req.listingId);orders.append(adminRow(listing?.title||"إعلان محذوف",`${req.mode==="protected"?"محمي":"مباشر"} · رسوم ${Math.round((req.feeRate||0)*100)}% · ${money(req.feeAmount||0)} ر.س`));});
+      }
+
+      function openAdminPreview() { renderAdmin(); $("adminDialog").showModal(); }
+
+      function bindEvents() {
+        let searchTimer;
+        els.search.addEventListener("input", () => {
+          window.clearTimeout(searchTimer);
+          searchTimer = window.setTimeout(() => {
+            renderListings();
+            if (cleanText(els.search.value, 120)) $("marketplace").scrollIntoView({ behavior: "smooth", block: "start" });
+          }, 350);
+        });
+        els.search.addEventListener("keydown", event => {
+          if (event.key !== "Enter") return;
+          event.preventDefault();
+          window.clearTimeout(searchTimer);
+          renderListings();
+          $("marketplace").scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+        els.sort.addEventListener("change", renderListings);
+        els.game.addEventListener("change", renderListings);
+        els.categorySelect.addEventListener("change", () => {
+          activeCategory = els.categorySelect.value;
+          renderCategories();
+          renderListings();
+        });
+        $("applyFilters").addEventListener("click", () => {
+          if (!validatePriceRange()) return;
+          renderListings();
+          toggleFilters(false);
+        });
+        $("clearFilters").addEventListener("click", clearFilters);
+        $("emptyAction").addEventListener("click", () => viewMode === "mine" && currentUser() ? openListingForm() : clearFilters());
+        document.querySelectorAll("[data-view]").forEach(button => button.addEventListener("click", () => setView(button.dataset.view)));
+        $("mobileFilterButton").addEventListener("click", () => toggleFilters());
+        els.backdrop.addEventListener("click", () => toggleFilters(false));
+
+        [$("addListingTop"), $("heroAddListing")].forEach(button => button.addEventListener("click", () => openListingForm()));
+        $("accountButton").addEventListener("click", openAccount);
+        $("loginTab").addEventListener("click", () => setAuthMode("login"));
+        $("registerTab").addEventListener("click", () => setAuthMode("register"));
+        $("authForm").addEventListener("submit", handleAuthSubmit);
+        $("listingForm").addEventListener("submit", handleListingSubmit);
+        $("detailReportButton").addEventListener("click", openReport);
+        $("detailEditButton").addEventListener("click", editActiveListing);
+        $("detailDeleteButton").addEventListener("click", deleteActiveListing);
+        $("detailBuyButton").addEventListener("click", () => {
+          const id = activeListingId;
+          $("detailDialog").close();
+          openPurchase(id);
+        });
+        $("purchaseForm").addEventListener("submit", handlePurchase);
+        $("requestCommercialAd").addEventListener("click", openCommercialAdRequest);
+        $("commercialAdForm").addEventListener("submit", handleCommercialAd);
+        $("adminPreviewButton").addEventListener("click", openAdminPreview);
+        document.querySelectorAll("[data-admin-tab]").forEach(button => button.addEventListener("click", () => {
+          document.querySelectorAll(".admin-pane").forEach(pane => pane.classList.remove("active"));
+          const target = { listings:"adminListingsPane", news:"adminNewsPane", ads:"adminAdsPane", orders:"adminOrdersPane" }[button.dataset.adminTab];
+          if (target) $(target).classList.add("active");
+        }));
+        $("reportForm").addEventListener("submit", handleReport);
+        $("logoutButton").addEventListener("click", logout);
+        $("deleteAccountButton").addEventListener("click", deleteLocalAccount);
+        $("resetDataButton").addEventListener("click", resetDemo);
+        document.querySelectorAll("[data-legal]").forEach(button => button.addEventListener("click", () => openLegal(button.dataset.legal)));
+
+        document.querySelectorAll("[data-close-dialog]").forEach(button => button.addEventListener("click", () => {
+          const dialog = $(button.dataset.closeDialog);
+          if (dialog?.open) dialog.close();
+        }));
+
+        document.querySelectorAll("dialog").forEach(dialog => {
+          dialog.addEventListener("click", event => {
+            const rect = dialog.getBoundingClientRect();
+            const outside = event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom;
+            if (outside) dialog.close();
+          });
+        });
+
+        document.querySelectorAll("[data-mobile-action]").forEach(button => button.addEventListener("click", () => {
+          document.querySelectorAll("[data-mobile-action]").forEach(item => item.classList.remove("active"));
+          button.classList.add("active");
+          const action = button.dataset.mobileAction;
+          if (action === "home") $("home").scrollIntoView({ behavior: "smooth" });
+          else if (action === "market") $("marketplace").scrollIntoView({ behavior: "smooth" });
+          else if (action === "add") openListingForm();
+          else openAccount();
+        }));
+      }
+
+      function init() {
+        fillSelects();
+        renderCategories();
+        updateAuthUI();
+        bindEvents();
+        renderListings();
+        renderNews();
+        renderCommercialAds();
+      }
+
+      init();
+    })();
+  </script>
 </body>
 </html>
